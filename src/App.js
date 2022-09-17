@@ -4,9 +4,17 @@ import PizzaCard from "./components/pizzaCard/pizzaCard.";
 import Sort from "./components/sort/Sort";
 import "./scss/app.scss";
 
-import pizzas from "./assets/pizza.json";
+import { useEffect, useState } from "react";
 
 function App() {
+   const [items, setItems] = useState([]);
+
+   useEffect(() => {
+      fetch("https://6325f72270c3fa390f922d7b.mockapi.io/items").then((res) =>
+         res.json().then((data) => setItems(data))
+      );
+   }, []);
+
    const renderPizzasBlock = (pizzas) => {
       return pizzas.map((pizza) => <PizzaCard key={pizza.id} {...pizza} />);
    };
@@ -23,7 +31,7 @@ function App() {
                   </div>
                   <h2 className="content__title">Все пиццы</h2>
                   <div className="content__items">
-                     {renderPizzasBlock(pizzas)}
+                     {renderPizzasBlock(items)}
                   </div>
                </div>
             </div>
