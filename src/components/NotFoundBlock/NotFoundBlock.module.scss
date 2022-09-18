@@ -1,0 +1,31 @@
+.notFound {
+    text-align: center;
+    padding-bottom: 40px;
+    &Title {
+        font-weight: 700;
+        font-size: 32px;
+        color: #000000;
+        margin-bottom: 10px;
+    }
+    &Descr {
+        margin-bottom: 20px;
+        font-weight: 400;
+        font-size: 18px;
+        color: #777777;
+    }
+    &Btn {
+        display: block;
+        margin: 0 auto;
+        width: 210px;
+        height: 46px;
+        background: #282828;
+        border-radius: 30px;
+        border: none;
+
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 46px;
+        color: #FFFFFF;
+        cursor: pointer;
+    }
+}
