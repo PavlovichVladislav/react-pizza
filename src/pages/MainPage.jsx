@@ -4,11 +4,14 @@ import Categories from "../components/categories/Categories";
 import Sort from "../components/sort/Sort";
 import PizzaCard from "../components/pizzaCard/PizzaCard.";
 import Skeleton from "../components/pizzaCard/Skeleton";
+import PizzaService from "../services/PizzaService";
 
 const MainPage = () => {
    const [items, setItems] = useState([]);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(false);
+
+   const pizzaService = new PizzaService();
 
    const onError = () => {
       setLoading(false);
@@ -21,9 +24,12 @@ const MainPage = () => {
    };
 
    useEffect(() => {
-      fetch("https://6325f72270c3fa390f922d7b.mockapi.io/items").then((res) =>
-         res.json().then(onLoaded).catch(onError)
-      );
+    pizzaService
+        .getPizzas()
+        .then(onLoaded)
+        .catch(onError);
+    
+    window.scrollTo(0, 0);
    }, []);
 
    const renderPizzasBlock = (items) => {

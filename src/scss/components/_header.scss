@@ -4,10 +4,18 @@
   border-bottom: 1px solid $gray-line;
   padding: 40px 0;
 
+  @media (max-width: 645px) {
+    padding: 20px 0;
+  }
+
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media (max-width: 645px) {
+      flex-direction: column;
+    }
   }
 
   &__logo {
@@ -15,6 +23,10 @@
 
     img {
       margin-right: 15px;
+
+      @media (max-width: 645px) {
+        display: none;
+      }
     }
 
     h1 {
@@ -23,10 +35,17 @@
       letter-spacing: 1%;
       text-transform: uppercase;
       font-weight: 800;
+
+      @media (max-width: 645px) {
+        text-align: center;
+      }
     }
 
     p {
       color: #7b7b7b;
+      @media (max-width: 645px) {
+        text-align: center;
+      }
     }
   }
 }

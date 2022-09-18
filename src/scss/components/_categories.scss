@@ -4,6 +4,11 @@
   ul {
     display: flex;
 
+    @media (max-width: 960px) {
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
     li {
       background-color: #f9f9f9;
       padding: 13px 30px;
