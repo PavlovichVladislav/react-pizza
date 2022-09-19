@@ -1,8 +1,4 @@
-import { useState } from "react";
-
-const Categories = () => {
-   const [activeCategory, setActiveCategory] = useState("Все");
-
+const Categories = ({categoryId, setCategoryId}) => {
    const categoriesArr = [
       "Все",
       "Мясные",
@@ -17,8 +13,8 @@ const Categories = () => {
          <ul>
             {categoriesArr.map((category, i) => (
                <li
-                  className={category === activeCategory ? "active" : ""}
-                  onClick={() => setActiveCategory(category)}
+                  className={ i === categoryId ? "active" : ""}
+                  onClick={() => setCategoryId(i)}
                   key={i}
                >
                   {category}

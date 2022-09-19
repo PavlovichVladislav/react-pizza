@@ -1,14 +1,20 @@
 import { useState } from "react";
 
-const Sort = () => {
-   const filters = ["популярности", "цене", "алфавиту"];
+const Sort = ({ sortType, setSortType }) => {
+   const filters = [
+      { name: "популярности(от больш.)", sort: "rating", order: 'desc'},
+      { name: "популярности(от меньш.)", sort: "rating", order: 'asc'},
+      { name: "цене(от больш.)", sort: "price", order: 'desc'},
+      { name: "цене(от меньш.)", sort: "price", order: 'asc'},
+      { name: "алфавиту(обр.)", sort: "title", order: 'desc'},
+      { name: "алфавиту(прям.)", sort: "title", order: 'asc'},
+   ];
    const [popupShow, setPopupShow] = useState(false);
-   const [activeFilter, setActiveFilter] = useState(0);
 
-   const onFilterClick = (i) => {
-      setActiveFilter(i);
+   const onFilterClick = (sortProp) => {
+      setSortType(sortProp);
       setPopupShow(false);
-   }
+   };
 
    return (
       <div className="sort">
@@ -27,7 +33,7 @@ const Sort = () => {
             </svg>
             <b>Сортировка по:</b>
             <span onClick={() => setPopupShow((popupShow) => !popupShow)}>
-               {filters[activeFilter]}
+               {sortType.name}
             </span>
          </div>
          {popupShow && (
@@ -37,10 +43,10 @@ const Sort = () => {
                      return (
                         <li
                            key={i}
-                           className={i === activeFilter ? "active" : ""}
-                           onClick={() => onFilterClick(i)}
+                           className={filter.sort === sortType.sort ? "active" : ""}
+                           onClick={() => onFilterClick(filter)}
                         >
-                           {filter}
+                           {filter.name}
                         </li>
                      );
                   })}

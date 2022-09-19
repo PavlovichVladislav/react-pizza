@@ -10,6 +10,12 @@ const MainPage = () => {
    const [items, setItems] = useState([]);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(false);
+   const [categoryId, setCategoryId] = useState(0);
+   const [sortType, setSortType] = useState({ 
+      name: "популярности(от больш.)", 
+      sort: "rating", 
+      order: 'desc'
+   });
 
    const pizzaService = new PizzaService();
 
@@ -24,13 +30,14 @@ const MainPage = () => {
    };
 
    useEffect(() => {
-    pizzaService
-        .getPizzas()
-        .then(onLoaded)
-        .catch(onError);
+      setLoading(true);
+      pizzaService
+         .getPizzas(categoryId, sortType.sort, sortType.order)
+         .then(onLoaded)
+         .catch(onError);
     
     window.scrollTo(0, 0);
-   }, []);
+   }, [categoryId, sortType]);
 
    const renderPizzasBlock = (items) => {
       return loading
@@ -41,8 +48,8 @@ const MainPage = () => {
    return (
       <div className="container">
          <div className="content__top">
-            <Categories />
-            <Sort />
+            <Categories categoryId={categoryId} setCategoryId={setCategoryId}/>
+            <Sort sortType={sortType} setSortType={setSortType}/>
          </div>
          <h2 className="content__title">Все пиццы</h2>
          <div className="content__items">{renderPizzasBlock(items)}</div>

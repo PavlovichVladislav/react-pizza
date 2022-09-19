@@ -11,8 +11,12 @@ class PizzaService {
       return await res.json();
    };
 
-   getPizzas = () => {
-      return this.getResource(`${this._apiBase}/items`);
+   getPizzas = (filterCategory = 0, sortProp, sortOrder) => {
+      const sort = `sortBy=${sortProp}`;
+      const order = `order=${sortOrder}`;
+      const category = filterCategory ? `category=${filterCategory}` : "";
+
+      return this.getResource(`${this._apiBase}/items?${category}&${sort}&${order}`);
    };
 }
 
