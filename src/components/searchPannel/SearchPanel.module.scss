@@ -1,0 +1,26 @@
+.searchPannel {
+    position: relative;
+    margin-left: 15px;
+}
+
+.searchField {
+    border: 1px solid rgba(0, 0 ,0, 0.1) ;
+    padding: 8px 15px;
+    padding-left: 45px;
+    width: 400px;
+    border-radius: 15px; 
+    font-size: 16px;
+
+    &:hover {
+        border: 1px solid rgba(0, 0 ,0, 0.3) ;
+    }
+}
+
+.icon {
+    left: 12px;
+    top: 9px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.3;
+    position: absolute;
+}

@@ -13,11 +13,18 @@
     align-items: center;
     justify-content: space-between;
 
+    &_left{
+      display: flex;
+      align-items: center;
+    }
+  
+
     @media (max-width: 645px) {
       flex-direction: column;
     }
   }
 
+  
   &__logo {
     display: flex;
 

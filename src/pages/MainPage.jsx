@@ -5,6 +5,9 @@ import Sort from "../components/sort/Sort";
 import PizzaCard from "../components/pizzaCard/PizzaCard.";
 import Skeleton from "../components/pizzaCard/Skeleton";
 import PizzaService from "../services/PizzaService";
+import Pagination from "../components/pagination/Pagination";
+import { useContext } from "react";
+import { PizzaAppContext } from "../App";
 
 const MainPage = () => {
    const [items, setItems] = useState([]);
@@ -16,7 +19,8 @@ const MainPage = () => {
       sort: "rating", 
       order: 'desc'
    });
-
+   const [curPage, setCurPage] = useState(1);
+   const {searchValue} = useContext(PizzaAppContext);
    const pizzaService = new PizzaService();
 
    const onError = () => {
@@ -32,12 +36,11 @@ const MainPage = () => {
    useEffect(() => {
       setLoading(true);
       pizzaService
-         .getPizzas(categoryId, sortType.sort, sortType.order)
+         .getPizzas(categoryId, sortType.sort, sortType.order, searchValue, curPage)
          .then(onLoaded)
          .catch(onError);
     
-    window.scrollTo(0, 0);
-   }, [categoryId, sortType]);
+   }, [categoryId, sortType, searchValue, curPage]);
 
    const renderPizzasBlock = (items) => {
       return loading
@@ -53,6 +56,7 @@ const MainPage = () => {
          </div>
          <h2 className="content__title">Все пиццы</h2>
          <div className="content__items">{renderPizzasBlock(items)}</div>
+         <Pagination setCurPage={setCurPage}/>
       </div>
    );
 };
