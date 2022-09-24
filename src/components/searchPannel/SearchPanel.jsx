@@ -1,10 +1,32 @@
-import { useContext } from "react";
+import { useContext, useRef, useCallback, useState } from "react";
 import { PizzaAppContext } from "../../App";
+
+import debounce from "../../utils/debounce";
 
 import s from "./SearchPanel.module.scss";
 
 const SearchPanel = () => {
-    const {searchValue, setSearchValue} = useContext(PizzaAppContext);
+   const [value, setValue] = useState("");
+   const { setSearchValue } = useContext(PizzaAppContext);
+   const searchInput = useRef(null);
+
+   const onClear = () => {
+      setSearchValue("");
+      setValue("");
+      searchInput.current.focus();
+   };
+
+   const updateSearchValue = useCallback(
+      debounce((value) => {
+         setSearchValue(value);
+      }, 300),
+      []
+   );
+
+   const onInputChange = (e) => {
+      setValue(e.target.value);
+      updateSearchValue(e.target.value);
+   };
 
    return (
       <div className={s.searchPannel}>
@@ -19,11 +41,23 @@ const SearchPanel = () => {
             </g>
          </svg>
          <input
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            ref={searchInput}
+            value={value}
+            onChange={onInputChange}
             className={s.searchField}
             placeholder="Поиск пиццы..."
          />
+         <svg
+            className={s.clear}
+            onClick={onClear}
+            height="48"
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+         >
+            <path d="M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z" />
+            <path d="M0 0h48v48H0z" fill="none" />
+         </svg>
       </div>
    );
 };

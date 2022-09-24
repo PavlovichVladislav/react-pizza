@@ -24,3 +24,14 @@
     opacity: 0.3;
     position: absolute;
 }
+
+.clear {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+    cursor: pointer;
+}

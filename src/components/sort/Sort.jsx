@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeSortType } from "../../redux/slices/filterSlice";
 
-const Sort = ({ sortType, setSortType }) => {
+const Sort = () => {
+   
    const filters = [
       { name: "популярности(от больш.)", sort: "rating", order: 'desc'},
       { name: "популярности(от меньш.)", sort: "rating", order: 'asc'},
@@ -9,10 +12,14 @@ const Sort = ({ sortType, setSortType }) => {
       { name: "алфавиту(обр.)", sort: "title", order: 'desc'},
       { name: "алфавиту(прям.)", sort: "title", order: 'asc'},
    ];
+
    const [popupShow, setPopupShow] = useState(false);
 
+   const sortType = useSelector((state) => state.filter.sortType);
+   const dispatch = useDispatch();
+
    const onFilterClick = (sortProp) => {
-      setSortType(sortProp);
+      dispatch(changeSortType(sortProp));
       setPopupShow(false);
    };
 
@@ -43,7 +50,7 @@ const Sort = ({ sortType, setSortType }) => {
                      return (
                         <li
                            key={i}
-                           className={filter.sort === sortType.sort ? "active" : ""}
+                           className={filter.name === sortType.name ? "active" : ""}
                            onClick={() => onFilterClick(filter)}
                         >
                            {filter.name}
