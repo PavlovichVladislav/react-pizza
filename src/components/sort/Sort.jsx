@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeSortType } from "../../redux/slices/filterSlice";
@@ -12,19 +14,38 @@ export const filters = [
 ];
 
 const Sort = () => {
-   
    const [popupShow, setPopupShow] = useState(false);
 
    const sortType = useSelector((state) => state.filter.sortType);
    const dispatch = useDispatch();
+
+   const sortRef = useRef();
 
    const onFilterClick = (sortProp) => {
       dispatch(changeSortType(sortProp));
       setPopupShow(false);
    };
 
+   useEffect(() => {
+      const clickOutsidePopup = e => {
+         if (!e.path.includes(sortRef.current)){
+            setPopupShow(false);
+         }
+      }
+
+      document.body.addEventListener('click', clickOutsidePopup)
+
+      return function cleanUp() {
+         document.body.removeEventListener('click', clickOutsidePopup);
+      }
+   }, []);
+
    return (
-      <div className="sort">
+      <div 
+         ref={sortRef} 
+         className="sort" 
+         onClick={() => setPopupShow((popupShow) => !popupShow)}
+      >
          <div className="sort__label">
             <svg
                width="10"
@@ -39,7 +60,7 @@ const Sort = () => {
                />
             </svg>
             <b>Сортировка по:</b>
-            <span onClick={() => setPopupShow((popupShow) => !popupShow)}>
+            <span>
                {sortType.name}
             </span>
          </div>
