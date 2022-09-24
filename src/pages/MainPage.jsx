@@ -1,24 +1,30 @@
-import { useEffect, useState, useContext } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import qs from "qs";
 
 import Categories from "../components/categories/Categories";
-import Sort from "../components/sort/Sort";
+import Sort, { filters } from "../components/sort/Sort";
 import PizzaCard from "../components/pizzaCard/PizzaCard.";
 import Skeleton from "../components/pizzaCard/Skeleton";
 import PizzaService from "../services/PizzaService";
 import Pagination from "../components/pagination/Pagination";
 
-import { PizzaAppContext } from "../App";
-
+import { setFilters } from "../redux/slices/filterSlice";
 
 const MainPage = () => {
    const [items, setItems] = useState([]);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(false);
 
-   const { categoryId, sortType, currentPage } = useSelector(state => state.filter);
+   const settingParamsByUrl = useRef(false);
+   const isMounted = useRef(false);
+
+   const navigate = useNavigate();
+   const dispatch = useDispatch();
+
+   const { categoryId, sortType, currentPage, searchValue } = useSelector(state => state.filter);
    
-   const {searchValue} = useContext(PizzaAppContext);
    const pizzaService = new PizzaService();
 
    const onError = () => {
@@ -32,12 +38,43 @@ const MainPage = () => {
    };
 
    useEffect(() => {
-      setLoading(true);
-      pizzaService
-         .getPizzas(categoryId, sortType.sort, sortType.order, searchValue, currentPage)
-         .then(onLoaded)
-         .catch(onError);
-    
+      if (window.location.search) {
+         
+         const params = qs.parse(window.location.search.substring(1));
+
+         const sort = filters.find(obj => obj.sort === params.sortBy && obj.order === params.order)
+
+         dispatch(setFilters({...params, sort}));
+
+         settingParamsByUrl.current = true;
+      }
+   }, [])
+
+   useEffect(() => {
+      if (isMounted.current) {
+         const queryString = qs.stringify({
+            sortBy: sortType.sort,
+            order: sortType.order,
+            category: categoryId,
+            page: currentPage
+         })
+   
+         navigate(`?${queryString}`);
+      }
+      
+      isMounted.current = true;
+   }, [categoryId, sortType.name, currentPage])
+
+   useEffect(() => {
+      if (!settingParamsByUrl.current) {
+         setLoading(true);
+         pizzaService
+            .getPizzas(categoryId, sortType.sort, sortType.order, searchValue, currentPage)
+            .then(onLoaded)
+            .catch(onError);
+      }
+
+      settingParamsByUrl.current = false;
    }, [categoryId, sortType.name, searchValue, currentPage]);
 
    const renderPizzasBlock = (items) => {

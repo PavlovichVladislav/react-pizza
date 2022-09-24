@@ -1,24 +1,25 @@
-import { useContext, useRef, useCallback, useState } from "react";
-import { PizzaAppContext } from "../../App";
+import { useRef, useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSearchValue } from "../../redux/slices/filterSlice";
 
 import debounce from "../../utils/debounce";
 
 import s from "./SearchPanel.module.scss";
 
 const SearchPanel = () => {
+   const dispatch = useDispatch();
    const [value, setValue] = useState("");
-   const { setSearchValue } = useContext(PizzaAppContext);
    const searchInput = useRef(null);
 
    const onClear = () => {
-      setSearchValue("");
+      dispatch(setSearchValue(''));
       setValue("");
       searchInput.current.focus();
    };
 
    const updateSearchValue = useCallback(
       debounce((value) => {
-         setSearchValue(value);
+         dispatch(setSearchValue(value));
       }, 300),
       []
    );
