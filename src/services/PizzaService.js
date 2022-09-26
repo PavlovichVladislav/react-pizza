@@ -11,18 +11,18 @@ class PizzaService {
       return await res.json();
    };
 
-   getPizzas = (
-      filterCategory = 0,
+   getPizzas = ({
+      categoryId = 0,
       sortProp,
       sortOrder,
       searchValue,
-      curPage
-   ) => {
+      currentPage,
+   }) => {
       const search = searchValue ? `search=${searchValue}` : "";
       const sort = `sortBy=${sortProp}`;
       const order = `order=${sortOrder}`;
-      const category = filterCategory ? `category=${filterCategory}` : "";
-      const page = `page=${curPage}`;
+      const category = categoryId ? `category=${categoryId}` : "";
+      const page = `page=${currentPage}`;
       const limit = "limit=4";
 
       return this.getResource(

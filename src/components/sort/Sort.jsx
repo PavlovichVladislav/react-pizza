@@ -1,7 +1,6 @@
-import { useRef } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { changeSortType } from "../../redux/slices/filterSlice";
 
 export const filters = [
