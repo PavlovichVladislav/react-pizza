@@ -29,6 +29,10 @@ class PizzaService {
          `${this._apiBase}/items?${category}&${sort}&${order}&${search}&${page}&${limit}`
       );
    };
+
+   getPizza = (id) => {
+      return this.getResource(`${this._apiBase}/items/${id}`);
+   };
 }
 
 export default PizzaService;

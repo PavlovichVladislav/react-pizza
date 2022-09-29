@@ -6,7 +6,7 @@ import debounce from "../../utils/debounce";
 
 import s from "./SearchPanel.module.scss";
 
-const SearchPanel = () => {
+const SearchPanel = () => { 
    const dispatch = useDispatch();
    const [value, setValue] = useState("");
    const searchInput = useRef(null);

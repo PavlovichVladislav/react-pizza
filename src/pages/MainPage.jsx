@@ -75,6 +75,8 @@ const MainPage = () => {
          : items.map((pizza) => <PizzaCard key={pizza.id} {...pizza} />);
    };
 
+   
+
    return (
       <div className="container">
          {loadingStatus === "error" ? (

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { addItem } from "../../redux/slices/cartSlice";
 
 const PizzaCard = ({ id, title, price, imageUrl, types, sizes }) => {
@@ -7,6 +8,7 @@ const PizzaCard = ({ id, title, price, imageUrl, types, sizes }) => {
    const [activeType, setActiveType] = useState(0);
    const [activeSize, setActiveSize] = useState(sizes[0]);
    const dispatch = useDispatch();
+   const navigate = useNavigate();
 
    const count = useSelector((state) => {
       let count = 0;
@@ -33,9 +35,13 @@ const PizzaCard = ({ id, title, price, imageUrl, types, sizes }) => {
       );
    };
 
+   const onPizzaClick = () => {
+      navigate(`/pizza/${id}`)
+   }
+
    return (
       <div className="pizza-block">
-         <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+         <img onClick={onPizzaClick} className="pizza-block__image" src={imageUrl} alt="Pizza" />
          <h4 className="pizza-block__title">{title}</h4>
          <div className="pizza-block__selector">
             <ul>

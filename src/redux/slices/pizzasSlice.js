@@ -8,7 +8,7 @@ const initialState = {
 
 export const fetchPizzas = createAsyncThunk(
    "pizzas/fetchPizzas",
-   async (settings) => {
+   async (settings, thunkApi) => {
       const pizzaService = new PizzaService();
       const response = await pizzaService.getPizzas(settings);
 
