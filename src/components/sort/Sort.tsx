@@ -3,7 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { changeSortType } from "../../redux/slices/filterSlice";
 
-export const filters = [
+type FilterItem = {
+   name: string;
+   sort: string; 
+   order: string;
+}
+
+export const filters: FilterItem[] = [
    { name: "популярности(от больш.)", sort: "rating", order: 'desc'},
    { name: "популярности(от меньш.)", sort: "rating", order: 'asc'},
    { name: "цене(от больш.)", sort: "price", order: 'desc'},
@@ -15,18 +21,18 @@ export const filters = [
 const Sort = () => {
    const [popupShow, setPopupShow] = useState(false);
 
-   const sortType = useSelector((state) => state.filter.sortType);
+   const sortType = useSelector((state: any) => state.filter.sortType);
    const dispatch = useDispatch();
 
-   const sortRef = useRef();
+   const sortRef = useRef<HTMLDivElement>(null);
 
-   const onFilterClick = (sortProp) => {
+   const onFilterClick = (sortProp: FilterItem) => {
       dispatch(changeSortType(sortProp));
       setPopupShow(false);
    };
 
    useEffect(() => {
-      const clickOutsidePopup = e => {
+      const clickOutsidePopup = (e: any) => {
          if (!e.path.includes(sortRef.current)){
             setPopupShow(false);
          }

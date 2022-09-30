@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
@@ -12,7 +12,7 @@ import Pagination from "../components/pagination/Pagination";
 import { setFilters } from "../redux/slices/filterSlice";
 import { fetchPizzas } from "../redux/slices/pizzasSlice";
 
-const MainPage = () => {
+const MainPage: FC = () => {
    const settingParamsByUrl = useRef(false);
    const isMounted = useRef(false);
 
@@ -20,9 +20,9 @@ const MainPage = () => {
    const dispatch = useDispatch();
 
    const { categoryId, sortType, currentPage, searchValue } = useSelector(
-      (state) => state.filter
+      (state: any) => state.filter
    );
-   const { loadingStatus, items } = useSelector((state) => state.pizzas);
+   const { loadingStatus, items } = useSelector((state: any) => state.pizzas);
 
    useEffect(() => {
       if (window.location.search) {
@@ -56,6 +56,7 @@ const MainPage = () => {
    useEffect(() => {
       if (!settingParamsByUrl.current) {
          dispatch(
+            //@ts-ignore
             fetchPizzas({
                categoryId,
                sortProp: sortType.sort,
@@ -69,10 +70,10 @@ const MainPage = () => {
       settingParamsByUrl.current = false;
    }, [categoryId, sortType, searchValue, currentPage]);
 
-   const renderPizzasBlock = (items) => {
+   const renderPizzasBlock = (items: any) => {
       return loadingStatus === "loading"
-         ? [...new Array(10)].map((item, i) => <Skeleton key={i} />)
-         : items.map((pizza) => <PizzaCard key={pizza.id} {...pizza} />);
+         ? [...new Array(10)].map((_, i) => <Skeleton key={i} />)
+         : items.map((pizza: any) => <PizzaCard key={pizza.id} {...pizza} />);
    };
 
    

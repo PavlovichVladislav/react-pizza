@@ -1,40 +1,42 @@
-import { FC, useState, useEffect,  } from "react";
+import { FC, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import PizzaService from "../../services/PizzaService";
 
-interface PizzaInterface {
-    imageUrl: string,
-    title: string,
-    price: number
-}
+// interface PizzaInterface
 
 const PizzaInfo: FC = () => {
-    
-    const [pizza, setPizza] = useState<PizzaInterface>();
-    const { id } = useParams();
-    const pizzaService = new PizzaService();
-    const navigate = useNavigate();
+   const [pizza, setPizza] = useState<{
+      imageUrl: string;
+      title: string;
+      price: number;
+   }>({
+      imageUrl: "",
+      title: "",
+      price: 0,
+   });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await pizzaService.getPizza(id);
-                setPizza(res);
-            } catch (error) {
-                console.log(error);
-                navigate("/");
-            }
-        }
+   const { id } = useParams();
+   const pizzaService = new PizzaService();
+   const navigate = useNavigate();
 
-        fetchData();
-    }, [id])
+   useEffect(() => {
+      const fetchData = async () => {
+         try {
+            const res = await pizzaService.getPizza(id);
+            setPizza(res);
+         } catch (error) {
+            console.log(error);
+            navigate("/");
+         }
+      };
 
-    if (!Object.keys(pizza).length) {
-        return (
-            <div>Загрузка....</div>
-        )
-    }
+      fetchData();
+   }, [id]);
+
+   if (!Object.keys(pizza).length) {
+      return <div>Загрузка....</div>;
+   }
 
    return (
       <div>
@@ -52,5 +54,3 @@ const PizzaInfo: FC = () => {
 };
 
 export default PizzaInfo;
-
-

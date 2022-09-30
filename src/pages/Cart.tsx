@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
@@ -6,12 +7,12 @@ import CartItem from "../components/cartItem/CartItem";
 
 import { clearItems, selectCart } from "../redux/slices/cartSlice";
 
-const Cart = () => {
+const Cart: FC = () => {
    const { items, totalPrice, totalCount } = useSelector(selectCart);
    const dispatch = useDispatch();
 
    const renderItems = () => {
-      return items.map(item => <CartItem key={item.id} {...item} />)
+      return items.map((item: any) => <CartItem key={item.id} {...item} />)
    }
    
    if (!totalCount) return <CartEmpty/>

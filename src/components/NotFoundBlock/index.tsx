@@ -1,7 +1,8 @@
+import { FC } from "react";
 import { NavLink } from "react-router-dom";
 import s from "./NotFoundBlock.module.scss";
 
-const NotFoundBlock = () => {
+const NotFoundBlock: FC = () => {
    return (
       <div className={s.notFound}>
          <h2 className={s.notFoundTitle}>Ничего не найдено 😕</h2>

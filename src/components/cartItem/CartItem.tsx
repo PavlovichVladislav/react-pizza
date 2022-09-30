@@ -1,8 +1,19 @@
+import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { addItem, minusItem, removeItem } from "../../redux/slices/cartSlice";
 
-const CartItem = ({ id, title, price, imageUrl, type, size, count }) => {
-   const typeNames = ["тонкое", "традиционное"];
+type CartItemsProps = {
+   id: string;
+   title: string;
+   price: number;
+   imageUrl: string;
+   type: number;
+   size: number;
+   count: number;
+}
+
+const CartItem: FC<CartItemsProps> = ({ id, title, price, imageUrl, type, size, count }) => {
+   const typeNames: string[] = ["тонкое", "традиционное"];
    const dispatch = useDispatch();
 
    const onPlusPizza = () => {

@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, FC } from "react";
 import { useDispatch } from "react-redux";
 import { setSearchValue } from "../../redux/slices/filterSlice";
 
@@ -6,27 +6,32 @@ import debounce from "../../utils/debounce";
 
 import s from "./SearchPanel.module.scss";
 
-const SearchPanel = () => { 
+const SearchPanel: FC = () => {
    const dispatch = useDispatch();
    const [value, setValue] = useState("");
-   const searchInput = useRef(null);
+   const searchInput = useRef<HTMLInputElement>(null);
 
    const onClear = () => {
-      dispatch(setSearchValue(''));
+      dispatch(setSearchValue(""));
       setValue("");
-      searchInput.current.focus();
+      console.log(searchInput);
+      if (searchInput.current) searchInput.current.focus();
+
+      searchInput.current?.focus();
    };
 
    const updateSearchValue = useCallback(
-      debounce((value) => {
+      debounce((value: string) => {
          dispatch(setSearchValue(value));
       }, 300),
       []
    );
 
-   const onInputChange = (e) => {
+
+   const onInputChange = (e: any) => {
       setValue(e.target.value);
-      updateSearchValue(e.target.value);
+      // updateSearchValue(e.target.value);
+      updateSearchValue();
    };
 
    return (

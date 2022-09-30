@@ -1,11 +1,12 @@
+import { FC } from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
+import logoSvg from '../../assets/img/pizza-logo.svg';
 import { selectCart } from "../../redux/slices/cartSlice";
-
 import SearchPanel from "../searchPannel/SearchPanel";
 
-const Header = () => {
+const Header: FC = () => {
    const { totalPrice, totalCount } = useSelector(selectCart);
 
    return (
@@ -13,7 +14,7 @@ const Header = () => {
          <div className="container">
             <div className="container_left">
                <NavLink to="/" className="header__logo">
-                  <img width="38" src="./img/pizza-logo.svg" alt="Pizza logo" />
+                  <img width="38" src={logoSvg} alt="Pizza logo" />
                   <div>
                      <h1>React Pizza</h1>
                      <p>самая вкусная пицца во вселенной</p>

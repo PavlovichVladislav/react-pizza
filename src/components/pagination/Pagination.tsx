@@ -1,10 +1,11 @@
+import { FC } from "react";
 import ReactPaginate from "react-paginate";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../redux/slices/filterSlice";
 
 import s from "./Pagination.module.scss";
 
-const Pagination = () => {
+const Pagination: FC = () => {
    const dispatch = useDispatch();
 
    return (
@@ -16,7 +17,7 @@ const Pagination = () => {
          pageRangeDisplayed={4}
          pageCount={3}
          previousLabel="<"
-         renderOnZeroPageCount={null}
+         // forcePage={}
       />
    );
 };
