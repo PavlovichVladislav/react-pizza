@@ -11,7 +11,7 @@ const Categories: FC = () => {
       "Острые",
       "Закрытые",
    ];
-
+   
    const categoryId = useSelector((state: any) => state.filter.categoryId);
    const dispatch = useDispatch();
 

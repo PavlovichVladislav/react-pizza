@@ -9,6 +9,10 @@ type FilterItem = {
    order: string;
 }
 
+type PopupClick = MouseEvent & {
+   path: Node[];
+}
+
 export const filters: FilterItem[] = [
    { name: "популярности(от больш.)", sort: "rating", order: 'desc'},
    { name: "популярности(от меньш.)", sort: "rating", order: 'asc'},
@@ -32,11 +36,13 @@ const Sort = () => {
    };
 
    useEffect(() => {
-      const clickOutsidePopup = (e: any) => {
-         if (!e.path.includes(sortRef.current)){
+      const clickOutsidePopup = ( ev: MouseEvent ) => {
+         const _event = ev as PopupClick;
+ 
+         if (sortRef.current && !_event.path.includes(sortRef.current)){
             setPopupShow(false);
          }
-      }
+      };
 
       document.body.addEventListener('click', clickOutsidePopup)
 
