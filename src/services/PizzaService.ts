@@ -1,7 +1,15 @@
+interface requestParams {
+   categoryId: number;
+   sortProp: string;
+   sortOrder: string;
+   searchValue: string;
+   currentPage: number;
+}
+
 class PizzaService {
    _apiBase = "https://6325f72270c3fa390f922d7b.mockapi.io";
 
-   getResource = async (url) => {
+   getResource = async (url: string) => {
       let res = await fetch(url);
 
       if (!res.ok) {
@@ -17,7 +25,7 @@ class PizzaService {
       sortOrder,
       searchValue,
       currentPage,
-   }) => {
+   }: requestParams) => {
       const search = searchValue ? `search=${searchValue}` : "";
       const sort = `sortBy=${sortProp}`;
       const order = `order=${sortOrder}`;
@@ -30,7 +38,7 @@ class PizzaService {
       );
    };
 
-   getPizza = (id) => {
+   getPizza = (id: string | undefined) => {
       return this.getResource(`${this._apiBase}/items/${id}`);
    };
 }

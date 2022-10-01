@@ -12,7 +12,7 @@ const Cart: FC = () => {
    const dispatch = useDispatch();
 
    const renderItems = () => {
-      return items.map((item: any) => <CartItem key={item.id} {...item} />)
+      return items.map((item) => <CartItem key={item.id} {...item} />)
    }
    
    if (!totalCount) return <CartEmpty/>

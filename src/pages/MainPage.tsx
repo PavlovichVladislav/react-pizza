@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 
@@ -10,29 +10,35 @@ import Skeleton from "../components/pizzaCard/Skeleton";
 import Pagination from "../components/pagination/Pagination";
 
 import { setFilters } from "../redux/slices/filterSlice";
-import { fetchPizzas } from "../redux/slices/pizzasSlice";
+import { fetchPizzas, PizzaItem } from "../redux/slices/pizzasSlice";
+import { RootState, useAppDispatch } from "../redux/store";
 
 const MainPage: FC = () => {
    const settingParamsByUrl = useRef(false);
    const isMounted = useRef(false);
 
    const navigate = useNavigate();
-   const dispatch = useDispatch();
+   const dispatch = useAppDispatch();
 
    const { categoryId, sortType, currentPage, searchValue } = useSelector(
-      (state: any) => state.filter
+      (state: RootState) => state.filter
    );
-   const { loadingStatus, items } = useSelector((state: any) => state.pizzas);
+   const { loadingStatus, items } = useSelector((state: RootState) => state.pizzas);
 
    useEffect(() => {
       if (window.location.search) {
-         const params = qs.parse(window.location.search.substring(1));
+         const params = qs.parse(window.location.search.substring(1)) ;
 
-         const sort = filters.find(
+         const sortType = filters.find(
             (obj) => obj.sort === params.sortBy && obj.order === params.order
          );
-
-         dispatch(setFilters({ ...params, sort }));
+         
+         dispatch(setFilters({
+            categoryId: Number(params.categoryId),
+            searchValue: '',
+            currentPage: Number(params.currentPage),
+            sortType: sortType ? sortType : filters[0],
+         }));
 
          settingParamsByUrl.current = true;
       }
@@ -43,8 +49,8 @@ const MainPage: FC = () => {
          const queryString = qs.stringify({
             sortBy: sortType.sort,
             order: sortType.order,
-            category: categoryId,
-            page: currentPage,
+            categoryId: categoryId,
+            currentPage: currentPage,
          });
 
          navigate(`?${queryString}`);
@@ -56,7 +62,6 @@ const MainPage: FC = () => {
    useEffect(() => {
       if (!settingParamsByUrl.current) {
          dispatch(
-            //@ts-ignore
             fetchPizzas({
                categoryId,
                sortProp: sortType.sort,
@@ -70,10 +75,10 @@ const MainPage: FC = () => {
       settingParamsByUrl.current = false;
    }, [categoryId, sortType, searchValue, currentPage]);
 
-   const renderPizzasBlock = (items: any) => {
+   const renderPizzasBlock = (items: PizzaItem[]) => {
       return loadingStatus === "loading"
          ? [...new Array(10)].map((_, i) => <Skeleton key={i} />)
-         : items.map((pizza: any) => <PizzaCard key={pizza.id} {...pizza} />);
+         : items.map((pizza) => <PizzaCard key={pizza.id} {...pizza} />);
    };
 
    

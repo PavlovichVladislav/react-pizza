@@ -1,7 +1,8 @@
 import { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addItem } from "../../redux/slices/cartSlice";
+import { addItem, CartItemType } from "../../redux/slices/cartSlice";
+import { RootState } from "../../redux/store";
 
 type PizzaCardProps = {
    id: string;
@@ -19,10 +20,10 @@ const PizzaCard: FC<PizzaCardProps> = ({ id, title, price, imageUrl, types, size
    const dispatch = useDispatch();
    const navigate = useNavigate();
 
-   const count = useSelector((state: any) => {
+   const count = useSelector((state: RootState) => {
       let count = 0;
 
-      state.cart.items.forEach((item: any) => {
+      state.cart.items.forEach((item: CartItemType) => {
          if (item.id === id) {
             count += item.count;
          }
@@ -32,15 +33,18 @@ const PizzaCard: FC<PizzaCardProps> = ({ id, title, price, imageUrl, types, size
    });
 
    const onAddPizza = () => {
+      const item: CartItemType = {
+         id,
+         title,
+         price,
+         imageUrl,
+         type: activeType,
+         size: activeSize,
+         count: count
+      }
+
       dispatch(
-         addItem({
-            id,
-            title,
-            price,
-            imageUrl,
-            type: activeType,
-            size: activeSize,
-         })
+         addItem(item)
       );
    };
 

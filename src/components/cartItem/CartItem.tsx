@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useDispatch } from "react-redux";
-import { addItem, minusItem, removeItem } from "../../redux/slices/cartSlice";
+import { addItem, CartItemType, minusItem, removeItem } from "../../redux/slices/cartSlice";
 
 type CartItemsProps = {
    id: string;
@@ -17,15 +17,15 @@ const CartItem: FC<CartItemsProps> = ({ id, title, price, imageUrl, type, size, 
    const dispatch = useDispatch();
 
    const onPlusPizza = () => {
-      dispatch(addItem({ id, price, type, size }));
+      dispatch(addItem({ id, type, size} as CartItemType));
    };
 
    const onMinusPizza = () => {
-      dispatch(minusItem({ id, title, price, imageUrl, type, size }));
+      dispatch(minusItem({ id, price, type, size } as CartItemType));
    };
 
    const onItemRemove = () => {
-      dispatch(removeItem({id, count, price, type, size}));
+      dispatch(removeItem({ id, price, type, size, count } as CartItemType));
    };
 
    return (
