@@ -1,9 +1,7 @@
-import { useRef, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, useRef, useEffect, useState, memo } from "react";
+import { useDispatch } from "react-redux";
 
 import { changeSortType, sortObj } from "../../redux/slices/filterSlice";
-import { RootState } from "../../redux/store";
-
 
 type PopupClick = MouseEvent & {
    path: Node[];
@@ -18,12 +16,13 @@ export const filters: sortObj[] = [
    { name: "алфавиту(прям.)", sort: "title", order: 'asc'},
 ];
 
-const Sort = () => {
+type SortProps = {
+   sortType: sortObj;
+}
+
+const Sort: FC<SortProps> = memo(({sortType}) => {
    const [popupShow, setPopupShow] = useState(false);
-
-   const sortType = useSelector((state: RootState) => state.filter.sortType);
    const dispatch = useDispatch();
-
    const sortRef = useRef<HTMLDivElement>(null);
 
    const onFilterClick = (sortProp: sortObj) => {
@@ -90,6 +89,6 @@ const Sort = () => {
          )}
       </div>
    );
-};
+});
 
 export default Sort;

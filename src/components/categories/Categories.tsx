@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeCategoryId } from "../../redux/slices/filterSlice";
 import { RootState } from "../../redux/store";
 
-const Categories: FC = () => {
+const Categories: FC = memo(() => {
    const categoriesArr: string[] = [
       "Все",
       "Мясные",
@@ -31,6 +31,6 @@ const Categories: FC = () => {
          </ul>
       </div>
    );
-};
+});
 
 export default Categories;

@@ -35,7 +35,7 @@ const MainPage: FC = () => {
          
          dispatch(setFilters({
             categoryId: Number(params.categoryId),
-            searchValue: '',
+            searchValue: String(params.searchValue),
             currentPage: Number(params.currentPage),
             sortType: sortType ? sortType : filters[0],
          }));
@@ -49,15 +49,16 @@ const MainPage: FC = () => {
          const queryString = qs.stringify({
             sortBy: sortType.sort,
             order: sortType.order,
-            categoryId: categoryId,
-            currentPage: currentPage,
+            categoryId,
+            currentPage,
+            searchValue,
          });
 
          navigate(`?${queryString}`);
       }
 
       isMounted.current = true;
-   }, [categoryId, sortType, currentPage]);
+   }, [categoryId, sortType, currentPage, searchValue]);
 
    useEffect(() => {
       if (!settingParamsByUrl.current) {
@@ -81,8 +82,6 @@ const MainPage: FC = () => {
          : items.map((pizza) => <PizzaCard key={pizza.id} {...pizza} />);
    };
 
-   
-
    return (
       <div className="container">
          {loadingStatus === "error" ? (
@@ -94,7 +93,7 @@ const MainPage: FC = () => {
             <>
                <div className="content__top">
                   <Categories />
-                  <Sort />
+                  <Sort sortType={sortType}/>
                </div>
                <h2 className="content__title">Все пиццы</h2>
                <div className="content__items">{renderPizzasBlock(items)}</div>
