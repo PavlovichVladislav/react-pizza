@@ -1,13 +1,33 @@
-import { FC } from "react";
-import { useSelector } from "react-redux";
+import { FC, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-import logoSvg from '../../assets/img/pizza-logo.svg';
-import { selectCart } from "../../redux/slices/cartSlice";
+import { addItem } from "../../redux/cart/slice";
+import { CartItemType } from "../../redux/cart/types";
+import { selectCart } from "../../redux/cart/selectors";
+
 import SearchPanel from "../searchPannel/SearchPanel";
 
+import logoSvg from '../../assets/img/pizza-logo.svg';
+
+
 const Header: FC = () => {
-   const { totalPrice, totalCount } = useSelector(selectCart);
+   const { items, totalPrice, totalCount } = useSelector(selectCart);
+   const dispatch = useDispatch();
+
+   useEffect(() => {
+      const items = window.localStorage.getItem('cart');
+      if (items) {
+         JSON.parse(items).forEach((item: CartItemType ) => {
+            dispatch(addItem(item));
+         });
+      }
+   }, [])
+
+   useEffect(() => {
+      const json = JSON.stringify(items);
+      window.localStorage.setItem('cart', json);
+   }, [totalCount])
 
    return (
       <div className="header">

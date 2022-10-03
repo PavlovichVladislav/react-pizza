@@ -1,13 +1,14 @@
 import { FC, useRef, useEffect, useState, memo } from "react";
 import { useDispatch } from "react-redux";
 
-import { changeSortType, sortObj } from "../../redux/slices/filterSlice";
+import { changeSortType } from "../../redux/filter/slice";
+import { SortObj } from "../../redux/filter/types";
 
 type PopupClick = MouseEvent & {
    path: Node[];
 }
 
-export const filters: sortObj[] = [
+export const filters: SortObj[] = [
    { name: "популярности(от больш.)", sort: "rating", order: 'desc'},
    { name: "популярности(от меньш.)", sort: "rating", order: 'asc'},
    { name: "цене(от больш.)", sort: "price", order: 'desc'},
@@ -17,7 +18,7 @@ export const filters: sortObj[] = [
 ];
 
 type SortProps = {
-   sortType: sortObj;
+   sortType: SortObj;
 }
 
 const Sort: FC<SortProps> = memo(({sortType}) => {
@@ -25,7 +26,7 @@ const Sort: FC<SortProps> = memo(({sortType}) => {
    const dispatch = useDispatch();
    const sortRef = useRef<HTMLDivElement>(null);
 
-   const onFilterClick = (sortProp: sortObj) => {
+   const onFilterClick = (sortProp: SortObj) => {
       dispatch(changeSortType(sortProp));
       setPopupShow(false);
    };

@@ -1,7 +1,8 @@
 import { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addItem, CartItemType } from "../../redux/slices/cartSlice";
+import { addItem } from "../../redux/cart/slice";
+import { CartItemType } from "../../redux/cart/types";
 import { RootState } from "../../redux/store";
 
 type PizzaCardProps = {
@@ -40,7 +41,7 @@ const PizzaCard: FC<PizzaCardProps> = ({ id, title, price, imageUrl, types, size
          imageUrl,
          type: activeType,
          size: activeSize,
-         count: count
+         count: 1
       }
 
       dispatch(

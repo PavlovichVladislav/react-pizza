@@ -9,9 +9,10 @@ import PizzaCard from "../components/pizzaCard/PizzaCard.";
 import Skeleton from "../components/pizzaCard/Skeleton";
 import Pagination from "../components/pagination/Pagination";
 
-import { setFilters } from "../redux/slices/filterSlice";
-import { fetchPizzas, PizzaItem } from "../redux/slices/pizzasSlice";
+import { setFilters } from "../redux/filter/slice";
+import { fetchPizzas } from "../redux/pizza/slice";
 import { RootState, useAppDispatch } from "../redux/store";
+import { PizzaItem } from "../redux/pizza/types";
 
 const MainPage: FC = () => {
    const settingParamsByUrl = useRef(false);

@@ -1,6 +1,6 @@
 import { useRef, useCallback, useState, FC, ChangeEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchValue } from "../../redux/slices/filterSlice";
+import { setSearchValue } from "../../redux/filter/slice";
 import { RootState } from "../../redux/store";
 
 import debounce from "../../utils/debounce";
