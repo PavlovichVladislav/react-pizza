@@ -1,17 +1,13 @@
 import { lazy, Suspense } from "react";
-
 import { Route, Routes } from "react-router-dom";
 
-import Header from "./components/header/Header";
-// import Cart from "./pages/Cart";
+import { Header } from "./components";
 import MainPage from "./pages/MainPage";
-// import NotFound from "./pages/NotFound";
-// import PizzaInfo from "./components/pizzaInfo/PizzaInfo";
 
 import "./scss/app.scss";
 
 const Cart = lazy(() => import(/* webpackChunkName: "Cart" */"./pages/Cart"));
-const PizzaInfo = lazy(() => import(/* webpackChunkName: "PizzaInfo" */ "./components/pizzaInfo/PizzaInfo"));
+const PizzaPage = lazy(() => import(/* webpackChunkName: "PizzaInfo" */ "./pages/PizzaPage"));
 const NotFound = lazy(() => import(/* webpackChunkName: "NotFound" */ "./pages/NotFound"));
 
 function App() {
@@ -42,7 +38,7 @@ function App() {
                      path="/pizza/:id"
                      element={
                         <Suspense fallback={<div>Загрузка...</div>}>
-                           <PizzaInfo />
+                           <PizzaPage />
                         </Suspense>
                      }
                   />
