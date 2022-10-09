@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { addItem } from "../../redux/cart/slice";
 import { CartItemType } from "../../redux/cart/types";
@@ -9,6 +9,7 @@ import { selectCart } from "../../redux/cart/selectors";
 import SearchPanel from "../searchPannel/SearchPanel";
 
 import logoSvg from '../../assets/img/pizza-logo.svg';
+import { setSignInActive, setSignUpActive } from "../../redux/modals/slice";
 
 
 const Header: FC = () => {
@@ -43,6 +44,20 @@ const Header: FC = () => {
                <SearchPanel/>
             </div>
             <div className="header__cart">
+               {
+                  false ? 
+                  (
+                     <>
+                        <button onClick={() => dispatch(setSignUpActive())} className="header__btn">Регистрация</button>
+                        <button onClick={() => dispatch(setSignInActive())} className="header__btn">Войти</button>
+                     </>
+                  ) :
+                  (
+                     <>
+                        <Link to="/user/admin" className="header__btn">Admin</Link>
+                     </>
+                  )
+               }
                <NavLink to="/cart" className="button button--cart">
                   <span>{totalPrice} ₽</span>
                   <div className="button__delimiter"></div>
@@ -75,6 +90,7 @@ const Header: FC = () => {
                         strokeLinejoin="round"
                      />
                   </svg>
+
                   <span>{totalCount}</span>
                </NavLink>
             </div>

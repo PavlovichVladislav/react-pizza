@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
-import { Header } from "./components";
+import { Header, NewProducModal, OrderModal, SignInModal, SignUpModal } from "./components";
+import AdminPage from "./pages/AdminPage";
 import MainPage from "./pages/MainPage";
 
 import "./scss/app.scss";
@@ -42,9 +43,22 @@ function App() {
                         </Suspense>
                      }
                   />
+                  <Route
+                     path="/user/admin"
+                     element={
+                        <Suspense fallback={<div>Загрузка...</div>}>
+                           <AdminPage />
+                        </Suspense>
+                     }
+                  />
+                  
                </Routes>
             </div>
          </div>
+         <SignUpModal/>
+         <SignInModal/>
+         <OrderModal/>
+         <NewProducModal/>
       </div>
    );
 }

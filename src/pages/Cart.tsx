@@ -6,6 +6,7 @@ import { selectCart } from "../redux/cart/selectors";
 import { clearItems } from "../redux/cart/slice";
 
 import { CartEmpty, CartItem } from "../components";
+import { setOrderActive } from "../redux/modals/slice";
 
 const Cart: FC = () => {
    const { items, totalPrice, totalCount } = useSelector(selectCart);
@@ -129,8 +130,8 @@ const Cart: FC = () => {
 
                      <span>Вернуться назад</span>
                   </NavLink>
-                  <div className="button pay-btn">
-                     <span>Оплатить сейчас</span>
+                  <div className="button pay-btn" onClick={() => dispatch(setOrderActive())}>
+                     <span>Оформить заказ</span>
                   </div>
                </div>
             </div>
