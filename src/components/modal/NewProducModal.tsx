@@ -3,6 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import s from "./SignUpModal.module.scss";
 import { setNewProducActive } from "../../redux/modals/slice";
 import { RootState } from "../../redux/store";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import PizzaService from "../../services/PizzaService";
+
+export type Pizza = {
+   price: string;
+   title: string;
+   sizes: string[];
+   imageUrl: string;
+   calories: string;
+   weight: string;
+   types: string[];
+   rating: string;
+}
 
 const NewProducModal: FC = () => {
    const newProducActive = useSelector(
@@ -30,16 +43,7 @@ const NewProducModal: FC = () => {
                      fill="white"
                   ></path>
                </svg>
-               <h2>Добавление нового товара</h2>
-               <form>
-                    <input required className={s.modalInput} type="text" placeholder="Стоимсть" />
-                    <input required className={s.modalInput} type="text" placeholder="Название" />
-                    <input required className={s.modalInput} type="text" placeholder="Размеры(через запятую)" />
-                    <input required className={s.modalInput} type="file" placeholder="Изображение" />
-                    <input required className={s.modalInput} type="text" placeholder="Калорийность" />
-                    <input required className={s.modalInput} type="text" placeholder="Масса" />
-                    <button className="button button--outline button--add button--modal">Добавить товар</button>
-               </form>
+               <Basic/>
             </div>
          </div>
       );
@@ -47,5 +51,74 @@ const NewProducModal: FC = () => {
       return null;
    }
 };
+
+const Basic: FC = () => (
+   <div>
+      <h2>Добавление нового товара</h2>
+      <Formik
+         initialValues={{
+            price: "",
+            title: "",
+            sizes: "",
+            imageUrl: "",
+            calories: "",
+            weight: "",
+            types: "",
+            category: "",
+            rating: "",
+         }}
+         //  validate={values => {
+         //    const errors = {};
+         //    if (!values.email) {
+         //      errors.email = 'Required';
+         //    } else if (
+         //      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+         //    ) {
+         //      errors.email = 'Invalid email address';
+         //    }
+         //    return errors;
+         //  }}
+         onSubmit={(values, { setSubmitting }) => {
+            const pizzaSerivce = new PizzaService();
+
+            const pizzaObj: Pizza = {
+               ...values,
+               sizes: values.sizes.split(', '),
+               types:  values.types.split(', ')
+            };
+
+            pizzaSerivce.postPizzas(JSON.stringify(pizzaObj, null, 2));
+            
+            setSubmitting(false);
+         }}
+      >
+         {({ isSubmitting }) => (
+            <Form>
+               <Field className={s.modalInput} type="text" name="price" placeholder="Стоимсть"/>
+               <ErrorMessage name="price" component="div" />
+               <Field className={s.modalInput} type="text" name="title" placeholder="Название"/>
+               <ErrorMessage name="title" component="div" />
+               <Field className={s.modalInput} type="text" name="sizes" placeholder="Размеры"/>
+               <ErrorMessage name="sizes" component="div" />
+               <Field className={s.modalInput} type="text" name="types" placeholder="Типы"/>
+               <ErrorMessage name="sizes" component="div" />
+               <Field className={s.modalInput} type="text" name="imageUrl" placeholder="Ссылка на изображение"/>
+               <ErrorMessage name="imageUrl" component="div" />
+               <Field className={s.modalInput} type="text" name="calories" placeholder="Каллории"/>
+               <ErrorMessage name="calories" component="div" />
+               <Field className={s.modalInput} type="text" name="weight" placeholder="Масса"/>
+               <ErrorMessage name="weight" component="div" />
+               <Field className={s.modalInput} type="text" name="category" placeholder="Категория"/>
+               <ErrorMessage name="category" component="div" />
+               <Field className={s.modalInput} type="text" name="rating" placeholder="Рэйтинг"/>
+               <ErrorMessage name="rating" component="div" />
+               <button className="button button--outline button--add button--modal" type="submit" disabled={isSubmitting}>
+                  Добавить товар
+               </button>
+            </Form>
+         )}
+      </Formik>
+   </div>
+);
 
 export default NewProducModal;

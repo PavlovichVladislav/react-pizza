@@ -41,6 +41,22 @@ class PizzaService {
    getPizza = (id: string | undefined) => {
       return this.getResource(`${this._apiBase}/items/${id}`);
    };
+
+   postPizzas = async (pizza: BodyInit) => {
+      let res = await fetch(`${this._apiBase}/items`, {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+         },
+         body: pizza
+      })
+
+      if (!res.ok) {
+         throw new Error(`Could not post, status ${res.status}`);
+      }
+
+      return await res.json();
+   }
 }
 
 export default PizzaService;
