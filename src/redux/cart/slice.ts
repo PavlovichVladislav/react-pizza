@@ -32,10 +32,11 @@ export const cartSlice = createSlice({
             state.totalCount += action.payload.count;
          }
 
-         if (action.payload.count === 1) {
-            state.totalPrice += action.payload.price;
-         } else {
+         if (action.payload.count) {
             state.totalPrice += action.payload.price * action.payload.count;
+         } else {
+            state.totalPrice += action.payload.price;
+            console.log(action.payload.price);
          }
       },
       minusItem: (state, action: PayloadAction<CartItemType>) => {

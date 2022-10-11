@@ -18,7 +18,7 @@ const CartItem: FC<CartItemsProps> = ({ id, title, price, imageUrl, type, size, 
    const dispatch = useDispatch();
 
    const onPlusPizza = () => {
-      dispatch(addItem({ id, type, size} as CartItemType));
+      dispatch(addItem({ id, type, size, price} as CartItemType));
    };
 
    const onMinusPizza = () => {

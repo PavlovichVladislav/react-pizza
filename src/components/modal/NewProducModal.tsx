@@ -4,6 +4,7 @@ import s from "./SignUpModal.module.scss";
 import { setNewProducActive } from "../../redux/modals/slice";
 import { RootState } from "../../redux/store";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import PizzaService from "../../services/PizzaService";
 
 export type Pizza = {
@@ -15,7 +16,7 @@ export type Pizza = {
    weight: string;
    types: string[];
    rating: string;
-}
+};
 
 const NewProducModal: FC = () => {
    const newProducActive = useSelector(
@@ -43,7 +44,7 @@ const NewProducModal: FC = () => {
                      fill="white"
                   ></path>
                </svg>
-               <Basic/>
+               <Basic />
             </div>
          </div>
       );
@@ -67,54 +68,115 @@ const Basic: FC = () => (
             category: "",
             rating: "",
          }}
-         //  validate={values => {
-         //    const errors = {};
-         //    if (!values.email) {
-         //      errors.email = 'Required';
-         //    } else if (
-         //      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-         //    ) {
-         //      errors.email = 'Invalid email address';
-         //    }
-         //    return errors;
-         //  }}
-         onSubmit={(values, { setSubmitting }) => {
+         validationSchema={Yup.object({
+            price: Yup.number()
+               .required("Необходимо заполнить поле")
+               .max(2000, "Слишком большая стоимость!"),
+            title: Yup.string()
+               .required("Необходимо заполнить поле")
+               .max(30, "Слишком большое название!"),
+            sizes: Yup.string().required("Необходимо заполнить поле"),
+            types: Yup.string().required("Необходимо заполнить поле"),
+            imageUrl: Yup.string().required("Необходимо заполнить поле"),
+            calories: Yup.string(),
+            weight: Yup.string(),
+            category: Yup.number()
+               .required("Необходимо заполнить поле")
+               .min(1, "Категоря не может быть меньше 1 -й")
+               .max(5, "Категоря не может быть выше 5 -й"),
+            rating: Yup.number()
+               .required("Необходимо заполнить поле")
+               .min(1, "Рэйтинг не может быть ниже 1")
+               .max(10, "Рэйтинг не может быть больше 10"),
+         })}
+         onSubmit={(values, { setSubmitting, resetForm }) => {
             const pizzaSerivce = new PizzaService();
 
             const pizzaObj: Pizza = {
                ...values,
-               sizes: values.sizes.split(', '),
-               types:  values.types.split(', ')
+               sizes: values.sizes.split(", "),
+               types: values.types.split(", "),
             };
 
             pizzaSerivce.postPizzas(JSON.stringify(pizzaObj, null, 2));
-            
+
             setSubmitting(false);
+            resetForm();
          }}
       >
-         {({ isSubmitting }) => (
+         {({ isSubmitting, errors, touched }) => (
             <Form>
-               <Field className={s.modalInput} type="text" name="price" placeholder="Стоимсть"/>
+               <Field
+                  className={`${s.modalInput}${errors.price && touched.price ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="price"
+                  placeholder="Стоимсть"
+               />
                <ErrorMessage name="price" component="div" />
-               <Field className={s.modalInput} type="text" name="title" placeholder="Название"/>
+               <Field
+                  className={`${s.modalInput}${errors.title && touched.title  ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="title"
+                  placeholder="Название"
+               />
                <ErrorMessage name="title" component="div" />
-               <Field className={s.modalInput} type="text" name="sizes" placeholder="Размеры"/>
+               <Field
+                  className={`${s.modalInput}${errors.sizes && touched.sizes ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="sizes"
+                  placeholder="Размеры"
+               />
                <ErrorMessage name="sizes" component="div" />
-               <Field className={s.modalInput} type="text" name="types" placeholder="Типы"/>
-               <ErrorMessage name="sizes" component="div" />
-               <Field className={s.modalInput} type="text" name="imageUrl" placeholder="Ссылка на изображение"/>
+               <Field
+                  className={`${s.modalInput}${errors.types && touched.types ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="types"
+                  placeholder="Типы"
+               />
+               <ErrorMessage name="types" component="div" />
+               <Field
+                  className={`${s.modalInput}${errors.imageUrl && touched.imageUrl ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="imageUrl"
+                  placeholder="Ссылка на изображение"
+               />
                <ErrorMessage name="imageUrl" component="div" />
-               <Field className={s.modalInput} type="text" name="calories" placeholder="Каллории"/>
+               <Field
+                  className={`${s.modalInput}${errors.calories && touched.calories ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="calories"
+                  placeholder="Каллории"
+               />
                <ErrorMessage name="calories" component="div" />
-               <Field className={s.modalInput} type="text" name="weight" placeholder="Масса"/>
+               <Field
+                  className={`${s.modalInput}${errors.weight && touched.weight ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="weight"
+                  placeholder="Масса"
+               />
                <ErrorMessage name="weight" component="div" />
-               <Field className={s.modalInput} type="text" name="category" placeholder="Категория"/>
+               <Field
+                  className={`${s.modalInput}${errors.category && touched.category ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="category"
+                  placeholder="Категория"
+               />
                <ErrorMessage name="category" component="div" />
-               <Field className={s.modalInput} type="text" name="rating" placeholder="Рэйтинг"/>
+               <Field
+                  className={`${s.modalInput}${errors.rating && touched.rating ? ` ${s.modalInputError}`: ''}`}
+                  type="text"
+                  name="rating"
+                  placeholder="Рэйтинг"
+               />
                <ErrorMessage name="rating" component="div" />
-               <button className="button button--outline button--add button--modal" type="submit" disabled={isSubmitting}>
+               <button
+                  className="button button--outline button--add button--modal"
+                  type="submit"
+                  disabled={isSubmitting}
+               >
                   Добавить товар
                </button>
+               <div>Товар добавлен</div>
             </Form>
          )}
       </Formik>

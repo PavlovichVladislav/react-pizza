@@ -67,3 +67,4 @@ const PizzaInfo: FC = () => {
 };
 
 export default PizzaInfo;
+
