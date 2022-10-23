@@ -77,7 +77,7 @@ const MainPage: FC = () => {
    const renderPizzasBlock = (items: PizzaItem[]) => {
       return loadingStatus === "loading"
          ? [...new Array(10)].map((_, i) => <Skeleton key={i} />)
-         : items.map((pizza) => { console.log(pizza); return <PizzaCard key={pizza.id} {...pizza} />});
+         : items.map((pizza) => {return <PizzaCard key={pizza.id} {...pizza} />});
    };
 
    return (

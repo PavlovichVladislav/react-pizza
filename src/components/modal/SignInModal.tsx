@@ -1,14 +1,19 @@
-import { FC } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import s from "./SignUpModal.module.scss";
 import { setSignInActive } from "../../redux/modals/slice";
-import { RootState } from "../../redux/store";
+import { RootState, useAppDispatch } from "../../redux/store";
+import { login } from "../../redux/auth/slice";
 
 const SignInModal: FC = () => {
    const signInActive = useSelector(
       (state: RootState) => state.modals.signInActive
    );
-   const dispatch = useDispatch();
+
+   const dispatch = useAppDispatch();
+
+   const [email, setEmail] = useState<string>("");
+   const [password, setPassword] = useState<string>("");
 
    if (signInActive) {
       return (
@@ -32,13 +37,33 @@ const SignInModal: FC = () => {
                </svg>
                <h2>Авторизация</h2>
                <form>
-                    <input required className={s.modalInput} type="email" placeholder="Email" />
-                    <input required className={s.modalInput} type="text" placeholder="Пароль" />
-                    <label className={s.checkLabel}>
-                        Запомнить меня
-                        <input type="checkbox"/>
-                    </label>
-                    <button className="button button--outline button--add button--modal">Авторизироваться</button>
+                  <input
+                     className={s.modalInput}
+                     type="email"
+                     placeholder="Email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Пароль"
+                     value={password}
+                     onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <label className={s.checkLabel}>
+                     Запомнить меня
+                     <input type="checkbox" />
+                  </label>
+                  <button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        dispatch(login({ email, password }));
+                     }}
+                     className="button button--outline button--add button--modal"
+                  >
+                     Авторизироваться
+                  </button>
                </form>
             </div>
          </div>

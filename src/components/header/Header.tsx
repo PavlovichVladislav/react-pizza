@@ -10,11 +10,15 @@ import SearchPanel from "../searchPannel/SearchPanel";
 
 import logoSvg from '../../assets/img/pizza-logo.svg';
 import { setSignInActive, setSignUpActive } from "../../redux/modals/slice";
+import { RootState } from "../../redux/store";
 
 
 const Header: FC = () => {
    const { items, totalPrice, totalCount } = useSelector(selectCart);
+   const { isAuth, user } = useSelector((state: RootState) => state.auth);
    const dispatch = useDispatch();
+
+   console.log(isAuth);
 
    useEffect(() => {
       const items = window.localStorage.getItem('cart');
@@ -45,7 +49,7 @@ const Header: FC = () => {
             </div>
             <div className="header__cart">
                {
-                  false ? 
+                  !isAuth ? 
                   (
                      <>
                         <button onClick={() => dispatch(setSignUpActive())} className="header__btn">Регистрация</button>
@@ -54,7 +58,7 @@ const Header: FC = () => {
                   ) :
                   (
                      <>
-                        <Link to="/user/admin" className="header__btn">Admin</Link>
+                        <Link to="/user/admin" className="header__btn">{user.email}</Link>
                      </>
                   )
                }

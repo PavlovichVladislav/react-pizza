@@ -4,13 +4,15 @@ import cart from "./cart/slice";
 import pizzas from "./pizza/slice";
 import { useDispatch } from "react-redux";
 import modals from './modals/slice';
+import auth from './auth/slice';
 
 export const store = configureStore({
    reducer: {
       filter: filtersReducer,
       cart,
       pizzas,
-      modals
+      modals,
+      auth
    },
 });
 
