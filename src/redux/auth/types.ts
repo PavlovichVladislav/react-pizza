@@ -6,6 +6,7 @@ export interface AuthSliceState {
     regLoading: string;
     authLoading: string;
     logOutLoading: string;
+    errorMessage: string | undefined;
  }
 
 export interface LoginParams {

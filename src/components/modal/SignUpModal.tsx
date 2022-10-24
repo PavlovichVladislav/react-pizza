@@ -1,14 +1,18 @@
-import { FC } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import s from "./SignUpModal.module.scss";
 import { setSignUpActive } from "../../redux/modals/slice";
-import { RootState } from "../../redux/store";
+import { RootState, useAppDispatch } from "../../redux/store";
+import { registration } from "../../redux/auth/slice";
 
 const SignUpModal: FC = () => {
    const signUpActive = useSelector(
       (state: RootState) => state.modals.signUpActive
    );
-   const dispatch = useDispatch();
+   const dispatch = useAppDispatch();
+
+   const [email, setEmail] = useState<string>("");
+   const [password, setPassword] = useState<string>("");
 
    if (signUpActive) {
       return (
@@ -32,17 +36,53 @@ const SignUpModal: FC = () => {
                </svg>
                <h2>Регистрация</h2>
                <form>
-                    <input required className={s.modalInput} type="text" placeholder="Имя" />
-                    <input required className={s.modalInput} type="text" placeholder="Фамилия" />
-                    <input required className={s.modalInput} type="text" placeholder="Email" />
-                    <input required className={s.modalInput} type="text" placeholder="Пароль" />
-                    <input required className={s.modalInput} type="text" placeholder="Телефон" />
-                    <input required className={s.modalInput} type="text" placeholder="Дата рождения" />
-                    <label className={s.checkLabel}>
-                        Принимаю политику конфиденциальности
-                        <input required type="checkbox" placeholder="Польз.соглашение" />
-                    </label>
-                    <button className="button button--outline button--add button--modal">Зарегистрироваться</button>
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Имя"
+                  />
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Фамилия"
+                  />
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Пароль"
+                     value={password}
+                     onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Телефон"
+                  />
+                  <input
+                     className={s.modalInput}
+                     type="text"
+                     placeholder="Дата рождения"
+                  />
+                  <label className={s.checkLabel}>
+                     Принимаю политику конфиденциальности
+                     <input type="checkbox" placeholder="Польз.соглашение" />
+                  </label>
+                  <button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        dispatch(registration({ email, password }));
+                     }}
+                     className="button button--outline button--add button--modal"
+                  >
+                     Зарегистрироваться
+                  </button>
                </form>
             </div>
          </div>

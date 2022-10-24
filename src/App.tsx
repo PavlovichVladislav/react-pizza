@@ -1,9 +1,11 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { Header, NewProducModal, OrderModal, SignInModal, SignUpModal } from "./components";
 import AdminPage from "./pages/AdminPage";
 import MainPage from "./pages/MainPage";
+import { checkAuth } from "./redux/auth/slice";
+import { useAppDispatch } from "./redux/store";
 
 import "./scss/app.scss";
 
@@ -12,6 +14,14 @@ const PizzaPage = lazy(() => import(/* webpackChunkName: "PizzaInfo" */ "./pages
 const NotFound = lazy(() => import(/* webpackChunkName: "NotFound" */ "./pages/NotFound"));
 
 function App() {
+   const dispatch = useAppDispatch();
+
+   useEffect( () => {
+      if (localStorage.getItem('token')) {
+         dispatch(checkAuth());
+      }
+   }, [])
+
    return (
       <div className="App">
          <div className="wrapper">

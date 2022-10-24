@@ -71,10 +71,8 @@
   }
 
   &__cart {
-    width: 195px;
-    justify-content: center;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   &__username {
