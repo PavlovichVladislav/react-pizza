@@ -17,4 +17,8 @@ export interface LoginParams {
 export interface RegParams {
     email: string;
     password: string;
+    name: string;
+    surname: string; 
+    phone: string;
+    date: string | undefined;
 }

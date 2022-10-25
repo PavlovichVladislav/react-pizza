@@ -6,6 +6,9 @@ import { RootState, useAppDispatch } from "../../redux/store";
 import { login } from "../../redux/auth/slice";
 import spinner from "../../assets/img/spinner.svg";
 
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
 const SignInModal: FC = () => {
    const [req, setReq] = useState<boolean>(false);
 
@@ -17,16 +20,13 @@ const SignInModal: FC = () => {
       (state: RootState) => state.auth
    );
 
+   const dispatch = useAppDispatch();
+
    useEffect(() => {
-      if (regLoading === 'idle' && req) {
+      if (regLoading === "idle" && req) {
          dispatch(setSignInActive());
       }
    }, [regLoading]);
-
-   const dispatch = useAppDispatch();
-
-   const [email, setEmail] = useState<string>("");
-   const [password, setPassword] = useState<string>("");
 
    if (regLoading === "loading" && signInActive) {
       return (
@@ -79,39 +79,63 @@ const SignInModal: FC = () => {
                   ></path>
                </svg>
                <h2>Авторизация</h2>
-               <form>
-                  <input
-                     className={s.modalInput}
-                     type="email"
-                     placeholder="Email"
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <input
-                     className={s.modalInput}
-                     type="text"
-                     placeholder="Пароль"
-                     value={password}
-                     onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <label className={s.checkLabel}>
-                     Запомнить меня
-                     <input type="checkbox" />
-                  </label>
-                  {errorMessage ? <div className={s.modalError}>{errorMessage}</div> : null}
-                  <button
-                     onClick={async (e) => {
-                        e.preventDefault();
-                        dispatch(login({ email, password }));
-                        setEmail("");
-                        setPassword("");
-                        setReq(true);
-                     }}
-                     className="button button--outline button--add button--modal"
-                  >
-                     Авторизироваться
-                  </button>
-               </form>
+               <Formik
+                  initialValues={{
+                     email: "",
+                     password: "",
+                  }}
+                  validationSchema={Yup.object({
+                     email: Yup.string()
+                        .required("Необходимо заполнить поле")
+                        .email("Проверьте правильность заполнения email"),
+                     password: Yup.string()
+                        .required("Необходимо заполнить поле")
+                  })}
+                  onSubmit={(values, { setSubmitting, resetForm }) => {
+                     dispatch(login({...values}));
+
+                     setSubmitting(false);
+                     setReq(true);
+                     resetForm();
+                  }}
+               >
+                  {({ isSubmitting, errors, touched }) => (
+                     <Form>
+                        <Field
+                           className={`${s.modalInput}${
+                              errors.email && touched.email
+                                 ? ` ${s.modalInputError}`
+                                 : ""
+                           }`}
+                           type="email"
+                           name="email"
+                           placeholder="example@mail.ru"
+                        />
+                        <ErrorMessage name="email" component="div" className={s.modalError}/>
+                        <Field
+                           className={`${s.modalInput}${
+                              errors.password && touched.password
+                                 ? ` ${s.modalInputError}`
+                                 : ""
+                           }`}
+                           type="password"
+                           name="password"
+                           placeholder="Пароль"
+                        />
+                        <ErrorMessage name="password" component="div" className={s.modalError}/>
+
+                        {errorMessage ? <div className={s.modalError}>{errorMessage}</div> : null}
+                        <button  
+                           className="button button--outline button--add button--modal"
+                           type="submit"
+                           disabled={isSubmitting}
+                        >
+                           Авторизироваться
+                        </button>
+                     </Form>
+                  )}
+               </Formik>
+              
             </div>
          </div>
       );

@@ -12,7 +12,7 @@ const initialState: AuthSliceState = {
    regLoading: "idle",
    authLoading: "idle",
    logOutLoading: "idle",
-   errorMessage: '',
+   errorMessage: "",
 };
 
 interface ValidationErrors {
@@ -35,7 +35,8 @@ export const login = createAsyncThunk<
 
       return response.data;
    } catch (err) {
-      let error: AxiosError<ValidationErrors> = err as AxiosError<ValidationErrors>; // bull shit
+      let error: AxiosError<ValidationErrors> =
+         err as AxiosError<ValidationErrors>; // bull shit
 
       if (!error.response) {
          throw err;
@@ -45,19 +46,36 @@ export const login = createAsyncThunk<
    }
 });
 
-export const registration = createAsyncThunk<IUser, RegParams>(
-   "auth/registration",
-   async (regParams) => {
+export const registration = createAsyncThunk<
+   AuthResponse,
+   RegParams,
+   {
+      rejectValue: ValidationErrors;
+   }
+>("auth/registration", async (regParams: RegParams, { rejectWithValue }) => {
+   try {
       const response = await AuthService.registration(
          regParams.email,
-         regParams.password
+         regParams.password,
+         regParams.name,
+         regParams.surname,
+         regParams.phone,
+         regParams.date
       );
 
-      localStorage.setItem("token", response.data.accessToken);
+      return response.data;
+   } catch (err) {
+      let error: AxiosError<ValidationErrors> =
+         err as AxiosError<ValidationErrors>; // bull shit
 
-      return response.data.user;
+      if (!error.response) {
+         throw err;
+      }
+
+      return rejectWithValue(error.response.data);
    }
-);
+
+});
 
 export const logOut = createAsyncThunk("auth/logOut", async () => {
    await AuthService.logout();
@@ -90,7 +108,7 @@ export const authSlice = createSlice({
             state.user = action.payload.user;
             localStorage.setItem("token", action.payload.accessToken);
 
-            state.errorMessage = '';
+            state.errorMessage = "";
          })
          .addCase(login.rejected, (state, action) => {
             state.regLoading = "error";
@@ -105,13 +123,20 @@ export const authSlice = createSlice({
          })
          .addCase(registration.fulfilled, (state, action) => {
             state.authLoading = "idle";
+
             state.isAuth = true;
-            state.user = action.payload;
+            state.user = action.payload.user;
+            localStorage.setItem("token", action.payload.accessToken);
+
+            state.errorMessage = "";
          })
-         .addCase(registration.rejected, (state) => {
+         .addCase(registration.rejected, (state, action) => {
             state.authLoading = "error";
+            
             state.isAuth = false;
             state.user = {} as IUser;
+
+            state.errorMessage = action.payload?.message;
          })
          .addCase(logOut.pending, (state) => {
             state.logOutLoading = "loading";
