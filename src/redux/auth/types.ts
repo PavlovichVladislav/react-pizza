@@ -3,8 +3,8 @@ import { IUser } from "../../@types/UserInterface";
 export interface AuthSliceState {
     user: IUser;
     isAuth: boolean;
-    regLoading: string;
-    authLoading: string;
+    isAdmin: boolean;
+    loadingStatus: string;
     logOutLoading: string;
     errorMessage: string | undefined;
  }

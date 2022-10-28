@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ModalsSliceState } from "./types";
 
 const initialState: ModalsSliceState = {
@@ -12,17 +12,17 @@ export const modalsSlice = createSlice({
    name: "modals",
    initialState,
    reducers: {
-      setSignUpActive: (state) => {
-         state.signUpActive = !state.signUpActive
+      setSignUpActive: (state, action: PayloadAction<boolean>) => {
+         state.signUpActive = action.payload
       },
-      setSignInActive: (state) => {
-        state.signInActive = !state.signInActive
+      setSignInActive: (state, action: PayloadAction<boolean>) => {
+        state.signInActive = action.payload
       },
-      setOrderActive: (state) => {
-        state.orderActive = !state.orderActive
+      setOrderActive: (state, action: PayloadAction<boolean>) => {
+        state.orderActive = action.payload
       },
-      setNewProducActive: (state) => {
-        state.newProducActive = !state.newProducActive
+      setNewProducActive: (state, action: PayloadAction<boolean>) => {
+        state.newProducActive = action.payload
       }
     }
 

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import s from "./SignUpModal.module.scss";
 import { setSignInActive } from "../../redux/modals/slice";
 import { RootState, useAppDispatch } from "../../redux/store";
-import { login } from "../../redux/auth/slice";
+import { clearAuthError, login } from "../../redux/auth/slice";
 import spinner from "../../assets/img/spinner.svg";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -16,19 +16,24 @@ const SignInModal: FC = () => {
       (state: RootState) => state.modals.signInActive
    );
 
-   const { errorMessage, regLoading } = useSelector(
+   const { errorMessage, loadingStatus } = useSelector(
       (state: RootState) => state.auth
    );
 
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      if (regLoading === "idle" && req) {
-         dispatch(setSignInActive());
+      if (loadingStatus === "idle" && req) {
+         dispatch(setSignInActive(false));
       }
-   }, [regLoading]);
+   }, [loadingStatus]);
 
-   if (regLoading === "loading" && signInActive) {
+   const closeModal = () => {
+      dispatch(setSignInActive(false));
+      dispatch(clearAuthError());
+   };
+
+   if (loadingStatus === "loading" && signInActive) {
       return (
          <div className={s.modal}>
             <div className={s.modalContent}>
@@ -39,7 +44,7 @@ const SignInModal: FC = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={s.modalClose}
-                  onClick={() => dispatch(setSignInActive())}
+                  onClick={closeModal}
                >
                   <path
                      fillRule="evenodd"
@@ -60,7 +65,16 @@ const SignInModal: FC = () => {
 
    if (signInActive) {
       return (
-         <div className={s.modal}>
+         <div
+            className={s.modal}
+            onClick={(e) => {
+               const target = e.target as Element;
+
+               if (target.classList.contains(s.modal)) {
+                  closeModal();
+               }
+            }}
+         >
             <div className={s.modalContent}>
                <svg
                   width="25"
@@ -69,7 +83,7 @@ const SignInModal: FC = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={s.modalClose}
-                  onClick={() => dispatch(setSignInActive())}
+                  onClick={() => closeModal()}
                >
                   <path
                      fillRule="evenodd"
@@ -88,11 +102,12 @@ const SignInModal: FC = () => {
                      email: Yup.string()
                         .required("Необходимо заполнить поле")
                         .email("Проверьте правильность заполнения email"),
-                     password: Yup.string()
-                        .required("Необходимо заполнить поле")
+                     password: Yup.string().required(
+                        "Необходимо заполнить поле"
+                     ),
                   })}
                   onSubmit={(values, { setSubmitting, resetForm }) => {
-                     dispatch(login({...values}));
+                     dispatch(login({ ...values }));
 
                      setSubmitting(false);
                      setReq(true);
@@ -111,7 +126,11 @@ const SignInModal: FC = () => {
                            name="email"
                            placeholder="example@mail.ru"
                         />
-                        <ErrorMessage name="email" component="div" className={s.modalError}/>
+                        <ErrorMessage
+                           name="email"
+                           component="div"
+                           className={s.modalError}
+                        />
                         <Field
                            className={`${s.modalInput}${
                               errors.password && touched.password
@@ -122,10 +141,16 @@ const SignInModal: FC = () => {
                            name="password"
                            placeholder="Пароль"
                         />
-                        <ErrorMessage name="password" component="div" className={s.modalError}/>
+                        <ErrorMessage
+                           name="password"
+                           component="div"
+                           className={s.modalError}
+                        />
 
-                        {errorMessage ? <div className={s.modalError}>{errorMessage}</div> : null}
-                        <button  
+                        {errorMessage ? (
+                           <div className={s.modalError}>{errorMessage}</div>
+                        ) : null}
+                        <button
                            className="button button--outline button--add button--modal"
                            type="submit"
                            disabled={isSubmitting}
@@ -135,7 +160,6 @@ const SignInModal: FC = () => {
                      </Form>
                   )}
                </Formik>
-              
             </div>
          </div>
       );

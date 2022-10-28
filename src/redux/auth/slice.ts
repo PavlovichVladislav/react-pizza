@@ -9,8 +9,8 @@ import { AuthSliceState, LoginParams, RegParams } from "./types";
 const initialState: AuthSliceState = {
    user: {} as IUser,
    isAuth: false,
-   regLoading: "idle",
-   authLoading: "idle",
+   isAdmin: false,
+   loadingStatus: "idle",
    logOutLoading: "idle",
    errorMessage: "",
 };
@@ -74,7 +74,6 @@ export const registration = createAsyncThunk<
 
       return rejectWithValue(error.response.data);
    }
-
 });
 
 export const logOut = createAsyncThunk("auth/logOut", async () => {
@@ -95,23 +94,31 @@ export const checkAuth = createAsyncThunk<IUser>("auth/checkAuth", async () => {
 export const authSlice = createSlice({
    name: "auth",
    initialState,
-   reducers: {},
+   reducers: {
+      clearAuthError: (state) => {
+         state.errorMessage = "";
+      },
+   },
    extraReducers: (builder) => {
       builder
          .addCase(login.pending, (state) => {
-            state.regLoading = "loading";
+            state.loadingStatus = "loading";
          })
          .addCase(login.fulfilled, (state, action) => {
-            state.regLoading = "idle";
+            state.loadingStatus = "idle";
 
             state.isAuth = true;
             state.user = action.payload.user;
             localStorage.setItem("token", action.payload.accessToken);
 
+            action.payload.user.email === "admin@pazzu.ru"
+               ? (state.isAdmin = true)
+               : (state.isAdmin = false);
+
             state.errorMessage = "";
          })
          .addCase(login.rejected, (state, action) => {
-            state.regLoading = "error";
+            state.loadingStatus = "error";
 
             state.isAuth = false;
             state.user = {} as IUser;
@@ -119,10 +126,10 @@ export const authSlice = createSlice({
             state.errorMessage = action.payload?.message;
          })
          .addCase(registration.pending, (state) => {
-            state.authLoading = "loading";
+            state.loadingStatus = "loading";
          })
          .addCase(registration.fulfilled, (state, action) => {
-            state.authLoading = "idle";
+            state.loadingStatus = "idle";
 
             state.isAuth = true;
             state.user = action.payload.user;
@@ -131,8 +138,8 @@ export const authSlice = createSlice({
             state.errorMessage = "";
          })
          .addCase(registration.rejected, (state, action) => {
-            state.authLoading = "error";
-            
+            state.loadingStatus = "error";
+
             state.isAuth = false;
             state.user = {} as IUser;
 
@@ -149,17 +156,24 @@ export const authSlice = createSlice({
          .addCase(logOut.rejected, (state) => {
             state.logOutLoading = "error";
          })
-         // .addCase(checkAuth.pending, (state) => {
-         //    state.logOutLoading = "loading";
-         // })
+         .addCase(checkAuth.pending, (state) => {
+            state.logOutLoading = "loading";
+         })
          .addCase(checkAuth.fulfilled, (state, action) => {
             state.isAuth = true;
+
+            action.payload.email === "admin@pazzu.ru"
+               ? (state.isAdmin = true)
+               : (state.isAdmin = false);
+
             state.user = action.payload;
+         })
+         .addCase(checkAuth.rejected, (state) => {
+            state.logOutLoading = "error";
          });
-      // .addCase(checkAuth.rejected, (state) => {
-      //    state.logOutLoading = "error";
-      // });
    },
 });
+
+export const { clearAuthError } = authSlice.actions;
 
 export default authSlice.reducer;

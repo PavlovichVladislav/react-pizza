@@ -50,13 +50,13 @@ const Header: FC = () => {
                {!isAuth ? (
                   <div>
                      <button
-                        onClick={() => dispatch(setSignUpActive())}
+                        onClick={() => dispatch(setSignUpActive(true))}
                         className="header__btn"
                      >
                         Регистрация
                      </button>
                      <button
-                        onClick={() => dispatch(setSignInActive())}
+                        onClick={() => dispatch(setSignInActive(true))}
                         className="header__btn"
                      >
                         Войти

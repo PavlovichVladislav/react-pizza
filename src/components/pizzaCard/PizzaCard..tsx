@@ -63,7 +63,7 @@ const PizzaCard: FC<PizzaCardProps> = ({ id, title, price, imageUrl, types, size
                   return (
                      <li
                         onClick={() => setActiveType(type)}
-                        className={type === activeType ? "active" : ""}
+                        className={type == activeType ? "active" : ""}
                         key={type}
                      >
                         {typeNames[type]}

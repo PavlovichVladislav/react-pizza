@@ -12,7 +12,16 @@ const OrderModal: FC = () => {
 
    if (orderActive) {
       return (
-         <div className={s.modal}>
+         <div
+            className={s.modal}
+            onClick={(e) => {
+               const target = e.target as Element;
+
+               if (target.classList.contains(s.modal)) {
+                  dispatch(setOrderActive(false));
+               }
+            }}
+         >
             <div className={s.modalContent}>
                <svg
                   width="25"
@@ -21,7 +30,7 @@ const OrderModal: FC = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={s.modalClose}
-                  onClick={() => dispatch(setOrderActive())}
+                  onClick={() => dispatch(setOrderActive(false))}
                >
                   <path
                      fillRule="evenodd"
@@ -32,8 +41,16 @@ const OrderModal: FC = () => {
                </svg>
                <h2>Оформление заказа</h2>
                <form>
-                    <input className={s.modalInput} type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required placeholder="Номер телефона" />
-                    <button className="button button--outline button--add button--modal">Оформить заказ</button>
+                  <input
+                     className={s.modalInput}
+                     type="tel"
+                     pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                     required
+                     placeholder="Номер телефона"
+                  />
+                  <button className="button button--outline button--add button--modal">
+                     Оформить заказ
+                  </button>
                </form>
             </div>
          </div>

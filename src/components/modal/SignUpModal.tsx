@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import s from "./SignUpModal.module.scss";
 import { setSignUpActive } from "../../redux/modals/slice";
 import { RootState, useAppDispatch } from "../../redux/store";
-import { registration } from "../../redux/auth/slice";
+import { clearAuthError, registration } from "../../redux/auth/slice";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import spinner from "../../assets/img/spinner.svg";
@@ -15,19 +15,24 @@ const SignUpModal: FC = () => {
       (state: RootState) => state.modals.signUpActive
    );
 
-   const { authLoading, errorMessage } = useSelector(
+   const { loadingStatus, errorMessage } = useSelector(
       (state: RootState) => state.auth
    );
 
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      if (authLoading === "idle" && req) {
-         dispatch(setSignUpActive());
+      if (loadingStatus === "idle" && req) {
+         dispatch(setSignUpActive(false));
       }
-   }, [authLoading]);
+   }, [loadingStatus]);
 
-   if (authLoading === "loading" && signUpActive) {
+   const closeModal = () => {
+      dispatch(setSignUpActive(false));
+      dispatch(clearAuthError());
+   };
+
+   if (loadingStatus === "loading" && signUpActive) {
       return (
          <div className={s.modal}>
             <div className={s.modalContent}>
@@ -38,7 +43,7 @@ const SignUpModal: FC = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={s.modalClose}
-                  onClick={() => dispatch(setSignUpActive())}
+                  onClick={() => closeModal()}
                >
                   <path
                      fillRule="evenodd"
@@ -59,7 +64,17 @@ const SignUpModal: FC = () => {
 
    if (signUpActive) {
       return (
-         <div className={s.modal}>
+         <div
+            className={s.modal}
+            onClick={(e) => {
+               const target = e.target as Element;
+
+               if (target.classList.contains(s.modal)) {
+                  closeModal();
+               }
+            }}
+            onKeyUp={() => console.log("up")}
+         >
             <div className={s.modalContent}>
                <svg
                   width="25"
@@ -68,7 +83,7 @@ const SignUpModal: FC = () => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={s.modalClose}
-                  onClick={() => dispatch(setSignUpActive())}
+                  onClick={() => closeModal()}
                >
                   <path
                      fillRule="evenodd"

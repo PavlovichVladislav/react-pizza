@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { Header, NewProducModal, OrderModal, SignInModal, SignUpModal } from "./components";
-import AdminPage from "./pages/AdminPage";
+import UserPage from "./pages/UserPage";
 import MainPage from "./pages/MainPage";
 import { checkAuth } from "./redux/auth/slice";
 import { useAppDispatch } from "./redux/store";
@@ -57,7 +57,7 @@ function App() {
                      path="/user/admin"
                      element={
                         <Suspense fallback={<div>Загрузка...</div>}>
-                           <AdminPage />
+                           <UserPage />
                         </Suspense>
                      }
                   />

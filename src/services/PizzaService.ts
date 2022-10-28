@@ -1,3 +1,5 @@
+import { PizzaPost } from "../redux/pizza/types";
+
 interface requestParams {
    categoryId: number;
    sortProp: string;
@@ -42,20 +44,20 @@ class PizzaService {
       return this.getResource(`${this._apiBase}/items/${id}`);
    };
 
-   postPizzas = async (pizza: BodyInit) => {
+   postPizza = async (pizza: PizzaPost) => {
       let res = await fetch(`${this._apiBase}/items`, {
          method: 'POST',
          headers: {
             'Content-Type': 'application/json;charset=utf-8'
          },
-         body: pizza
+         body: JSON.stringify(pizza)
       })
 
       if (!res.ok) {
          throw new Error(`Could not post, status ${res.status}`);
       }
 
-      return await res.json();
+      return res.status;
    }
 }
 

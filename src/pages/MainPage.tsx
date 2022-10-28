@@ -7,7 +7,7 @@ import { Categories, Sort, PizzaCard, Skeleton, Pagination } from '../components
 import{ filters } from "../components/sort/Sort";
 
 import { setFilters } from "../redux/filter/slice";
-import { fetchPizzas } from "../redux/pizza/slice";
+import { getPizzas } from "../redux/pizza/slice";
 import { RootState, useAppDispatch } from "../redux/store";
 import { PizzaItem } from "../redux/pizza/types";
 
@@ -61,7 +61,7 @@ const MainPage: FC = () => {
    useEffect(() => {
       if (!settingParamsByUrl.current) {
          dispatch(
-            fetchPizzas({
+            getPizzas({
                categoryId,
                sortProp: sortType.sort,
                sortOrder: sortType.order,

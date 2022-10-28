@@ -130,7 +130,7 @@ const Cart: FC = () => {
 
                      <span>Вернуться назад</span>
                   </NavLink>
-                  <div className="button pay-btn" onClick={() => dispatch(setOrderActive())}>
+                  <div className="button pay-btn" onClick={() => dispatch(setOrderActive(true))}>
                      <span>Оформить заказ</span>
                   </div>
                </div>
