@@ -102,8 +102,6 @@ const NewProducModal: FC = () => {
                            "Возможные типы(0/1), через запятую с пробелом, не более двух"
                         ),
                      imageUrl: Yup.string().required("Вставьте изображение"),
-                     // calories: Yup.string(),
-                     // weight: Yup.string(),
                      category: Yup.number()
                         .required("Укажите категорию")
                         .min(1, "Категоря не может быть меньше 1 -й")
@@ -206,36 +204,6 @@ const NewProducModal: FC = () => {
                            name="imageUrl"
                            component="div"
                         />
-                        {/* <Field
-                           className={`${s.modalInput}${
-                              errors.calories && touched.calories
-                                 ? ` ${s.modalInputError}`
-                                 : ""
-                           }`}
-                           type="text"
-                           name="calories"
-                           placeholder="Каллории"
-                        />
-                        <ErrorMessage
-                           className={s.modalErrorInput}
-                           name="calories"
-                           component="div"
-                        /> */}
-                        {/* <Field
-                           className={`${s.modalInput}${
-                              errors.weight && touched.weight
-                                 ? ` ${s.modalInputError}`
-                                 : ""
-                           }`}
-                           type="text"
-                           name="weight"
-                           placeholder="Масса"
-                        />
-                        <ErrorMessage
-                           className={s.modalErrorInput}
-                           name="weight"
-                           component="div"
-                        /> */}
                         <Field
                            className={`${s.modalInput}${
                               errors.category && touched.category

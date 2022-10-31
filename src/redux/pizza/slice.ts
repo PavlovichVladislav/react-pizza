@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import PizzaService from "../../services/PizzaService";
 import { LoadingStatus, PizzaItem, PizzaSliceState, getRequestParams, PizzaPost } from "./types";
 
-
-
 const initialState: PizzaSliceState = {
    loadingStatus: LoadingStatus.IDLE,
    addingStatus: LoadingStatus.IDLE,

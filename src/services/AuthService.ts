@@ -1,4 +1,4 @@
-import authApi from "../http";
+import authApi from "../http/authApi";
 import { AuthResponse } from "../@types/AuthResponse";
 import { AxiosResponse } from "axios";
 

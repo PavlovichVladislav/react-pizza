@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { AuthResponse } from "../../@types/AuthResponse";
 import { IUser } from "../../@types/UserInterface";
-import { API_URL } from "../../http";
+import { API_URL } from "../../http/authApi";
 import AuthService from "../../services/AuthService";
 import { AuthSliceState, LoginParams, RegParams } from "./types";
 

@@ -208,6 +208,7 @@ const SignUpModal: FC = () => {
                            component="div"
                            className={s.modalError}
                         />
+                        
                         <Field
                            className={`${s.modalInput}${
                               errors.phone && touched.phone

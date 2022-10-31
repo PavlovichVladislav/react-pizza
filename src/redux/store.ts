@@ -5,6 +5,7 @@ import pizzas from "./pizza/slice";
 import { useDispatch } from "react-redux";
 import modals from './modals/slice';
 import auth from './auth/slice';
+import order from './order/slice';
 
 export const store = configureStore({
    reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
       cart,
       pizzas,
       modals,
-      auth
+      auth,
+      order
    },
 });
 
