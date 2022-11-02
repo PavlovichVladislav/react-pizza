@@ -1,4 +1,14 @@
+import { OrderItem, ResponseItem } from "../../@types/Order";
+
+export interface Order {
+   orderItems: OrderItem[];
+   isAccepted: boolean;
+
+}
+
 export interface OrderSliceState {
-    loadingStatus: string,
-    errorMessage: string | undefined,
+   orders: ResponseItem[];
+   orderLoading: string;
+   loadingStatus: string;
+   errorMessage: string | undefined;
 }

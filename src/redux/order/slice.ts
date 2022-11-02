@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
-import { OrderInterface } from "../../@types/Order";
+import { OrderInterface, ResponseItem } from "../../@types/Order";
 
 import OrderService from "../../services/OrderService";
 import { OrderSliceState } from "./types";
 
 const initialState: OrderSliceState = {
+   orders: [],
+   orderLoading: 'idle', 
    loadingStatus: "idle",
    errorMessage: "",
 };
@@ -44,6 +46,29 @@ export const makeOrder = createAsyncThunk<
    }
 });
 
+export const getOrders = createAsyncThunk<
+   ResponseItem[],
+   string,
+   {
+      rejectValue: ValidationErrors;
+   }
+>("order/getOrders", async (email, { rejectWithValue }) => {
+   try {
+      const response = await OrderService.getOrders(email);
+
+      return response.data;
+   } catch (err) {
+      let error: AxiosError<ValidationErrors> =
+         err as AxiosError<ValidationErrors>; // bull shit
+
+      if (!error.response) {
+         throw err;
+      }
+
+      return rejectWithValue(error.response.data);
+   }
+});
+
 export const orderSlice = createSlice({
    name: "order",
    initialState,
@@ -65,6 +90,17 @@ export const orderSlice = createSlice({
             state.loadingStatus = "error";
 
             state.errorMessage = action.payload?.message;
+         })
+         .addCase(getOrders.pending, (state) => {
+            state.orderLoading = "loading";
+         })
+         .addCase(getOrders.fulfilled, (state, action) => {
+            state.orderLoading = "idle";
+            state.orders = action.payload;
+         })
+         .addCase(getOrders.rejected, (state) => {
+            state.orderLoading = "error";
+
          });
    },
 });

@@ -12,3 +12,8 @@ export interface OrderInterface {
    name: string;
    orderItems: OrderItem[];
 }
+
+export interface ResponseItem {
+   orderItems: OrderItem[]
+   isAccepted: boolean
+}

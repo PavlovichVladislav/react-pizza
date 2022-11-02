@@ -1,44 +1,32 @@
 import orderApi from "../http/orderApi";
 import { AxiosResponse } from "axios";
-import { OrderInterface, OrderItem } from "../@types/Order";
+import { OrderInterface, OrderItem, ResponseItem } from "../@types/Order";
 
 export default class OrderService {
    static async makeOrder(
       email: string,
       phone: string,
       name: string,
-      orderItems: OrderItem[],
+      orderItems: OrderItem[]
    ): Promise<AxiosResponse<OrderInterface>> {
-
-    const response = orderApi.post<OrderInterface>("/makeOrder", {
-        email,
-        phone,
-        name,
-        orderItems
-     });
+      const response = orderApi.post<OrderInterface>("/makeOrder", {
+         email,
+         phone,
+         name,
+         orderItems,
+      });
 
       return response;
    }
 
-//    static async registration(
-//       email: string,
-//       password: string,
-//       name: string,
-//       surname: string,
-//       phone: string,
-//       date: string | undefined
-//    ): Promise<AxiosResponse<AuthResponse>> {
-//       return pizzaApi.post<AuthResponse>("/registration", {
-//          email,
-//          password,
-//          name,
-//          surname,
-//          phone,
-//          date,
-//       });
-//    }
+   static async getOrders(
+      email: string,
+   ): Promise<AxiosResponse<ResponseItem[]>> {
 
-//    static async logout(): Promise<void> {
-//       return pizzaApi.post("/logout");
-//    }
+      const response = orderApi.post<ResponseItem[]>("/getUserOrders", {
+         email,
+      });
+
+      return response;
+   }
 }
