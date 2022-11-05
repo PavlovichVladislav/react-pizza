@@ -35,10 +35,7 @@ const OrderModal: FC = () => {
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      console.log(loadingStatus);
-      console.log(req);
       if (loadingStatus === "idle" && req) {
-         console.log('hello');
          setTimeout(() => {
             dispatch(setOrderActive(false));
             dispatch(clearOrderError());

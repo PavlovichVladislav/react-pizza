@@ -19,7 +19,7 @@ export default class OrderService {
       return response;
    }
 
-   static async getOrders(
+   static async getUserOrders(
       email: string,
    ): Promise<AxiosResponse<ResponseItem[]>> {
 
@@ -28,5 +28,17 @@ export default class OrderService {
       });
 
       return response;
+   }
+
+   static async getOrders(): Promise<AxiosResponse<ResponseItem[]>> {
+      const response = orderApi.get<ResponseItem[]>("/getOrders");
+
+      return response;
+   }
+
+   static async acceptOrder(id: string) {
+      orderApi.post("/acceptOrder", {
+         id
+      });
    }
 }

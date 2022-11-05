@@ -15,5 +15,6 @@ export interface OrderInterface {
 
 export interface ResponseItem {
    orderItems: OrderItem[]
-   isAccepted: boolean
+   isAccepted: boolean,
+   _id: string
 }

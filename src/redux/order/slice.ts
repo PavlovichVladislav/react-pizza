@@ -46,15 +46,39 @@ export const makeOrder = createAsyncThunk<
    }
 });
 
+export const getUserOrders = createAsyncThunk<
+   ResponseItem[],
+   string,
+   {
+      rejectValue: ValidationErrors;
+   }
+>("order/getUserOrders", async (email, { rejectWithValue }) => {
+   try {
+      const response = await OrderService.getUserOrders(email);
+
+      return response.data;
+   } catch (err) {
+      let error: AxiosError<ValidationErrors> =
+         err as AxiosError<ValidationErrors>; // bull shit
+
+      if (!error.response) {
+         throw err;
+      }
+
+      return rejectWithValue(error.response.data);
+   }
+});
+
 export const getOrders = createAsyncThunk<
    ResponseItem[],
    string,
    {
       rejectValue: ValidationErrors;
    }
->("order/getOrders", async (email, { rejectWithValue }) => {
+>("order/getOrders", async (badArg, { rejectWithValue }) => {
    try {
-      const response = await OrderService.getOrders(email);
+      console.log(badArg);
+      const response = await OrderService.getOrders();
 
       return response.data;
    } catch (err) {
@@ -90,6 +114,17 @@ export const orderSlice = createSlice({
             state.loadingStatus = "error";
 
             state.errorMessage = action.payload?.message;
+         })
+         .addCase(getUserOrders.pending, (state) => {
+            state.orderLoading = "loading";
+         })
+         .addCase(getUserOrders.fulfilled, (state, action) => {
+            state.orderLoading = "idle";
+            state.orders = action.payload;
+         })
+         .addCase(getUserOrders.rejected, (state) => {
+            state.orderLoading = "error";
+
          })
          .addCase(getOrders.pending, (state) => {
             state.orderLoading = "loading";

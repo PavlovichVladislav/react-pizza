@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getOrders } from "../../redux/order/slice";
+import { getUserOrders } from "../../redux/order/slice";
 import { RootState, useAppDispatch } from "../../redux/store";
 import OrderCard from "../orderCard/OrderCard";
 import s from "./UserAccount.module.scss";
@@ -11,7 +11,7 @@ const UserAccount: FC = () => {
    const orders = useSelector((state: RootState) => state.order.orders);
 
    useEffect(() => {
-      dispatch(getOrders(user.email))
+      dispatch(getUserOrders(user.email))
    }, [user])
 
    return (

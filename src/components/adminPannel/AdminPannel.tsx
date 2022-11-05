@@ -1,10 +1,18 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { setNewProducActive } from "../../redux/modals/slice";
-import { useAppDispatch } from "../../redux/store";
+import { getOrders } from "../../redux/order/slice";
+import { RootState, useAppDispatch } from "../../redux/store";
+import OrderCard from "../orderCard/OrderCard";
 
 const AdminPannel: FC = () => {
-    const dispatch = useAppDispatch();
+   const dispatch = useAppDispatch();
+   const orders = useSelector((state: RootState) => state.order.orders);
+
+   useEffect(() => {
+      dispatch(getOrders('getOrders'))
+   }, [])
 
    return (
       <div>
@@ -12,7 +20,10 @@ const AdminPannel: FC = () => {
             <h2 className="content__title">Панель управления</h2>
          </div>
          <div className="content__title">Заказы</div>
-         <div className="content__items">
+         {orders.map((order,i) => <OrderCard order={order} key={i}/>)}
+
+
+         {/* <div className="content__items">
             <div className="card">
                <div className="container">
                   <h4>
@@ -46,7 +57,7 @@ const AdminPannel: FC = () => {
                   </div>
                </div>
             </div>
-         </div>
+         </div> */}
 
          <div className="cart__bottom">
             <div className="cart__bottom-buttons">
